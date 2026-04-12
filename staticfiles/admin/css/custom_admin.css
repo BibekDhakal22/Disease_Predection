@@ -1,0 +1,367 @@
+/* ── MediPredict Dark Admin Theme ── */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --bg:       #070b14;
+  --surface:  #0e1525;
+  --surface2: #151f33;
+  --border:   #1a2744;
+  --accent:   #00d4ff;
+  --accent2:  #7c3aed;
+  --text:     #e2e8f0;
+  --muted:    #4a5568;
+  --green:    #22c55e;
+  --red:      #ef4444;
+  --amber:    #f59e0b;
+}
+
+/* ── Base ── */
+html, body {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: 'DM Sans', sans-serif !important;
+}
+
+/* ── Header ── */
+#header {
+  background: linear-gradient(135deg, #0e1525, #111827) !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 12px 20px !important;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.4) !important;
+}
+#branding h1, #branding h1 a:link, #branding h1 a:visited {
+  color: var(--accent) !important;
+  font-family: 'Syne', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 1.3rem !important;
+  text-shadow: 0 0 20px rgba(0,212,255,0.3) !important;
+}
+#user-tools, #user-tools a {
+  color: #64748b !important;
+  font-size: 0.82rem !important;
+}
+#user-tools a:hover { color: var(--accent) !important; }
+
+/* ── Nav / Breadcrumbs ── */
+div.breadcrumbs {
+  background: var(--surface) !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: #64748b !important;
+  padding: 10px 20px !important;
+  font-size: 0.82rem !important;
+}
+div.breadcrumbs a { color: var(--accent) !important; text-decoration: none !important; }
+
+/* ── Sidebar / Nav ── */
+#nav-sidebar {
+  background: var(--surface) !important;
+  border-right: 1px solid var(--border) !important;
+}
+#nav-sidebar .current-app .section:link,
+#nav-sidebar .current-app .section:visited {
+  color: var(--accent) !important;
+  border-left: 3px solid var(--accent) !important;
+  background: rgba(0,212,255,0.08) !important;
+}
+#nav-sidebar a:link, #nav-sidebar a:visited {
+  color: #94a3b8 !important;
+  padding: 6px 16px !important;
+  font-size: 0.85rem !important;
+  transition: color 0.15s !important;
+}
+#nav-sidebar a:hover { color: var(--accent) !important; }
+#nav-sidebar .app-predictor { color: var(--accent) !important; }
+
+/* ── Main content area ── */
+#content, #content-main, .colMS, #main, #container {
+  background: var(--bg) !important;
+}
+#content { color: var(--text) !important; }
+
+/* ── Content header ── */
+#content h1 {
+  color: var(--text) !important;
+  font-family: 'Syne', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.4rem !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 20px !important;
+}
+
+/* ── Module / App boxes ── */
+.module {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin-bottom: 16px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+}
+.module caption, .module h2 {
+  background: linear-gradient(135deg, var(--surface2), #1a2744) !important;
+  color: var(--accent) !important;
+  font-family: 'Syne', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  padding: 10px 16px !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.module table { background: transparent !important; }
+
+/* ── Dashboard app index ── */
+.app-predictor td, .app-auth td {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  padding: 10px 16px !important;
+}
+.app-predictor a, .app-auth a {
+  color: var(--text) !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+}
+.app-predictor a:hover, .app-auth a:hover { color: var(--accent) !important; }
+.addlink { color: var(--green) !important; font-size:0.8rem !important; }
+.changelink { color: var(--accent) !important; font-size:0.8rem !important; }
+
+/* ── Change list / Table ── */
+#changelist {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+#changelist table { background: transparent !important; width: 100% !important; }
+#changelist table thead th {
+  background: var(--surface2) !important;
+  color: #64748b !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 10px 14px !important;
+}
+#changelist table thead th a,
+#changelist table thead th a:visited {
+  color: #64748b !important;
+}
+#changelist table thead th a:hover { color: var(--accent) !important; }
+#changelist table tbody tr {
+  border-bottom: 1px solid rgba(26,39,68,0.6) !important;
+  transition: background 0.15s !important;
+}
+#changelist table tbody tr:hover td { background: rgba(0,212,255,0.04) !important; }
+#changelist table tbody td {
+  background: transparent !important;
+  color: var(--text) !important;
+  padding: 10px 14px !important;
+  font-size: 0.88rem !important;
+  border: none !important;
+}
+#changelist table tbody td a { color: var(--accent) !important; text-decoration: none !important; }
+#changelist table tbody td a:hover { text-decoration: underline !important; }
+.row1, .row2 { background: transparent !important; }
+
+/* ── Search bar ── */
+#toolbar {
+  background: var(--surface) !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 10px 14px !important;
+  border-radius: 10px 10px 0 0 !important;
+}
+#searchbar, #toolbar input[type="text"] {
+  background: var(--bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  color: var(--text) !important;
+  padding: 6px 12px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 0.88rem !important;
+  outline: none !important;
+}
+#searchbar:focus, #toolbar input[type="text"]:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(0,212,255,0.1) !important;
+}
+#toolbar input[type="submit"] {
+  background: var(--surface2) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  border-radius: 8px !important;
+  padding: 6px 14px !important;
+  cursor: pointer !important;
+  font-size: 0.85rem !important;
+}
+#toolbar input[type="submit"]:hover {
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+}
+
+/* ── Filters sidebar ── */
+#changelist-filter {
+  background: var(--surface) !important;
+  border-left: 1px solid var(--border) !important;
+  border-radius: 0 12px 12px 0 !important;
+}
+#changelist-filter h2 {
+  background: var(--surface2) !important;
+  color: var(--accent) !important;
+  font-family: 'Syne', sans-serif !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  padding: 10px 14px !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+#changelist-filter h3 {
+  color: #64748b !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  margin: 12px 14px 6px !important;
+}
+#changelist-filter ul { padding: 0 14px 10px !important; }
+#changelist-filter li { padding: 3px 0 !important; }
+#changelist-filter a {
+  color: #94a3b8 !important;
+  font-size: 0.85rem !important;
+  text-decoration: none !important;
+}
+#changelist-filter a:hover, #changelist-filter li.selected a {
+  color: var(--accent) !important;
+}
+
+/* ── Action bar ── */
+.actions {
+  background: var(--surface2) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 8px 14px !important;
+  margin-bottom: 10px !important;
+}
+.actions select, .actions label {
+  background: var(--bg) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+  font-size: 0.85rem !important;
+}
+.actions .button {
+  background: var(--surface2) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  border-radius: 6px !important;
+  padding: 4px 14px !important;
+  cursor: pointer !important;
+  font-size: 0.85rem !important;
+}
+.actions .button:hover { border-color: var(--accent) !important; color: var(--accent) !important; }
+
+/* ── Buttons ── */
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+  background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  color: white !important;
+  font-family: 'Syne', sans-serif !important;
+  font-weight: 700 !important;
+  padding: 8px 18px !important;
+  cursor: pointer !important;
+  font-size: 0.88rem !important;
+  transition: opacity 0.2s !important;
+}
+.button:hover, input[type=submit]:hover { opacity: 0.85 !important; }
+.button.default { background: linear-gradient(135deg, var(--accent), var(--accent2)) !important; }
+
+/* ── Pagination ── */
+.paginator {
+  background: var(--surface) !important;
+  border-top: 1px solid var(--border) !important;
+  color: #64748b !important;
+  padding: 10px 14px !important;
+  font-size: 0.85rem !important;
+}
+.paginator a { color: var(--accent) !important; }
+.paginator .this-page {
+  background: var(--accent) !important;
+  color: var(--bg) !important;
+  border-radius: 6px !important;
+  padding: 2px 8px !important;
+  font-weight: 700 !important;
+}
+
+/* ── Messages / Alerts ── */
+.messagelist li {
+  border-radius: 8px !important;
+  padding: 10px 16px !important;
+  font-size: 0.88rem !important;
+  margin-bottom: 8px !important;
+}
+.messagelist li.success {
+  background: rgba(34,197,94,0.1) !important;
+  border: 1px solid rgba(34,197,94,0.3) !important;
+  color: #86efac !important;
+}
+.messagelist li.error {
+  background: rgba(239,68,68,0.1) !important;
+  border: 1px solid rgba(239,68,68,0.3) !important;
+  color: #fca5a5 !important;
+}
+.messagelist li.warning {
+  background: rgba(245,158,11,0.1) !important;
+  border: 1px solid rgba(245,158,11,0.3) !important;
+  color: #fde68a !important;
+}
+
+/* ── Form fields ── */
+.form-row {
+  border-bottom: 1px solid var(--border) !important;
+  padding: 12px 0 !important;
+}
+input[type=text], input[type=password], input[type=email],
+input[type=number], select, textarea {
+  background: var(--bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  color: var(--text) !important;
+  padding: 7px 12px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 0.9rem !important;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(0,212,255,0.1) !important;
+  outline: none !important;
+}
+label { color: #94a3b8 !important; font-size: 0.85rem !important; }
+.help { color: #64748b !important; font-size: 0.8rem !important; }
+.readonly { color: var(--muted) !important; }
+
+/* ── Checkbox ── */
+input[type=checkbox] { accent-color: var(--accent) !important; }
+
+/* ── Recent actions ── */
+#recent-actions-module {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+}
+#recent-actions-module h2 {
+  color: var(--accent) !important;
+  font-family: 'Syne', sans-serif !important;
+}
+#recent-actions-module .actionlist li {
+  border-bottom: 1px solid var(--border) !important;
+  padding: 8px 0 !important;
+  color: #94a3b8 !important;
+  font-size: 0.85rem !important;
+}
+#recent-actions-module a { color: var(--accent) !important; }
+
+/* ── Select all / row checkbox ── */
+tr.selected td { background: rgba(0,212,255,0.05) !important; }

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Symptom Checker — MediPredict</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0e1a; color:#e2e8f0; font-family:'DM Sans',sans-serif; min-height:100vh; display:flex; flex-direction:column; background-image:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(0,212,255,0.07),transparent); }
+
+  header { border-bottom:1px solid #1e2d45; padding:1.2rem 2rem; display:flex; align-items:center; gap:0.75rem; background:rgba(10,14,26,0.9); position:sticky; top:0; z-index:100; backdrop-filter:blur(10px); }
+  .logo-icon { width:38px; height:38px; background:linear-gradient(135deg,#00d4ff,#7c3aed); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+  .logo-text { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; }
+  .logo-text span { color:#00d4ff; }
+  .nav-links { margin-left:auto; display:flex; gap:1rem; align-items:center; }
+  .nav-links a { color:#64748b; text-decoration:none; font-size:0.88rem; transition:color 0.2s; }
+  .nav-links a:hover,.nav-links a.active { color:#00d4ff; }
+  .user-badge { background:rgba(0,212,255,0.1); border:1px solid rgba(0,212,255,0.25); color:#00d4ff; font-size:0.78rem; padding:0.3rem 0.8rem; border-radius:100px; }
+
+  .chat-layout { display:flex; flex:1; height:calc(100vh - 73px); }
+
+  /* Sidebar */
+  .sidebar { width:280px; flex-shrink:0; background:#0d1220; border-right:1px solid #1e2d45; display:flex; flex-direction:column; padding:1.5rem; gap:1rem; overflow-y:auto; }
+  .sidebar-title { font-family:'Syne',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#64748b; margin-bottom:0.5rem; }
+  .selected-symptoms { display:flex; flex-wrap:wrap; gap:0.4rem; min-height:40px; }
+  .sym-tag { background:rgba(0,212,255,0.1); border:1px solid rgba(0,212,255,0.25); color:#00d4ff; padding:0.25rem 0.65rem; border-radius:100px; font-size:0.75rem; display:flex; align-items:center; gap:0.3rem; animation:tagIn 0.2s ease; }
+  @keyframes tagIn { from{opacity:0;transform:scale(0.8)} to{opacity:1;transform:scale(1)} }
+  .sym-tag span { cursor:pointer; opacity:0.6; font-size:1rem; line-height:1; }
+  .sym-tag span:hover { opacity:1; }
+
+  .sidebar-divider { height:1px; background:#1e2d45; }
+
+  .predict-btn { padding:0.9rem; background:linear-gradient(135deg,#00d4ff,#7c3aed); border:none; border-radius:12px; color:white; font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:700; cursor:pointer; transition:opacity 0.2s; }
+  .predict-btn:hover { opacity:0.9; }
+  .predict-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+  .reset-btn { padding:0.65rem; background:transparent; border:1px solid #1e2d45; border-radius:10px; color:#64748b; font-size:0.85rem; cursor:pointer; transition:all 0.2s; }
+  .reset-btn:hover { border-color:#ef4444; color:#ef4444; }
+
+  .symptom-count { font-size:0.8rem; color:#64748b; text-align:center; }
+  .symptom-count strong { color:#00d4ff; }
+
+  /* Chat area */
+  .chat-area { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+  .messages { flex:1; overflow-y:auto; padding:1.5rem; display:flex; flex-direction:column; gap:1rem; }
+  .messages::-webkit-scrollbar { width:4px; }
+  .messages::-webkit-scrollbar-track { background:transparent; }
+  .messages::-webkit-scrollbar-thumb { background:#1e2d45; border-radius:10px; }
+
+  /* Message bubbles */
+  .msg { display:flex; gap:0.75rem; max-width:80%; animation:msgIn 0.3s ease; }
+  @keyframes msgIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .msg.bot { align-self:flex-start; }
+  .msg.user { align-self:flex-end; flex-direction:row-reverse; }
+
+  .msg-avatar { width:34px; height:34px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1rem; }
+  .msg.bot .msg-avatar { background:linear-gradient(135deg,#00d4ff,#7c3aed); }
+  .msg.user .msg-avatar { background:#1e2d45; font-size:0.85rem; font-weight:700; color:#94a3b8; }
+
+  .msg-bubble { padding:0.85rem 1.1rem; border-radius:16px; font-size:0.9rem; line-height:1.6; }
+  .msg.bot .msg-bubble { background:#111827; border:1px solid #1e2d45; border-top-left-radius:4px; }
+  .msg.user .msg-bubble { background:linear-gradient(135deg,rgba(0,212,255,0.15),rgba(124,58,237,0.15)); border:1px solid rgba(0,212,255,0.2); border-top-right-radius:4px; }
+
+  /* Quick reply chips */
+  .chips { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.6rem; }
+  .chip { background:#111827; border:1px solid #1e2d45; color:#94a3b8; padding:0.35rem 0.85rem; border-radius:100px; font-size:0.8rem; cursor:pointer; transition:all 0.15s; }
+  .chip:hover { border-color:#00d4ff; color:#00d4ff; background:rgba(0,212,255,0.06); }
+  .chip.selected { background:rgba(0,212,255,0.12); border-color:rgba(0,212,255,0.4); color:#00d4ff; }
+
+  /* Result card inside chat */
+  .result-card { background:#0a0e1a; border:1px solid #1e2d45; border-radius:14px; padding:1.1rem; margin-top:0.75rem; }
+  .result-rank { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:#64748b; margin-bottom:0.2rem; }
+  .result-disease { font-family:'Syne',sans-serif; font-weight:700; font-size:1.05rem; margin-bottom:0.4rem; }
+  .result-row { display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem; }
+  .conf-val { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; }
+  .sev-badge { padding:0.2rem 0.65rem; border-radius:100px; font-size:0.72rem; font-weight:600; }
+  .conf-bar { height:5px; background:#1e2d45; border-radius:10px; overflow:hidden; flex:1; }
+  .conf-fill { height:100%; border-radius:10px; background:linear-gradient(90deg,#00d4ff,#7c3aed); transition:width 0.8s ease; }
+  .prec-list { margin-top:0.6rem; display:grid; grid-template-columns:1fr 1fr; gap:0.3rem; }
+  .prec-item { font-size:0.78rem; color:#94a3b8; display:flex; gap:0.3rem; align-items:flex-start; }
+  .prec-dot { color:#22c55e; flex-shrink:0; }
+
+  /* Input area */
+  .input-area { padding:1rem 1.5rem; border-top:1px solid #1e2d45; background:#0d1220; }
+  .input-row { display:flex; gap:0.75rem; align-items:center; }
+  #symptom-input { flex:1; background:#111827; border:1px solid #1e2d45; border-radius:12px; padding:0.85rem 1.1rem; color:#e2e8f0; font-size:0.92rem; font-family:'DM Sans',sans-serif; outline:none; transition:border-color 0.2s; }
+  #symptom-input:focus { border-color:#00d4ff; }
+  #symptom-input::placeholder { color:#4a5568; }
+  .send-btn { width:44px; height:44px; background:linear-gradient(135deg,#00d4ff,#7c3aed); border:none; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.1rem; transition:opacity 0.2s; flex-shrink:0; }
+  .send-btn:hover { opacity:0.9; }
+
+  /* Dropdown */
+  .input-wrap { position:relative; flex:1; }
+  #dropdown { position:absolute; bottom:calc(100% + 6px); left:0; right:0; background:#111827; border:1px solid #1e2d45; border-radius:12px; max-height:200px; overflow-y:auto; z-index:50; display:none; box-shadow:0 -10px 30px rgba(0,0,0,0.4); }
+  #dropdown.open { display:block; }
+  .dd-item { padding:0.65rem 1rem; cursor:pointer; font-size:0.88rem; color:#94a3b8; transition:all 0.15s; }
+  .dd-item:hover { background:rgba(0,212,255,0.08); color:#00d4ff; }
+
+  .typing { display:flex; gap:4px; align-items:center; padding:0.85rem 1.1rem; }
+  .typing-dot { width:7px; height:7px; border-radius:50%; background:#00d4ff; animation:bounce 1.2s infinite; }
+  .typing-dot:nth-child(2) { animation-delay:0.2s; }
+  .typing-dot:nth-child(3) { animation-delay:0.4s; }
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-8px)} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">🩺</div>
+  <div class="logo-text">Medi<span>Predict</span></div>
+  <div class="nav-links">
+    <a href="/">Predict</a>
+    <a href="/history/">History</a>
+    <a href="/chatbot/" class="active">Chatbot</a>
+    <a href="/about/">About</a>
+    <a href="/profile/">Profile</a>
+    <span class="user-badge">{{ request.user.username }}</span>
+    <a href="/logout/">Logout</a>
+  </div>
+</header>
+
+<div class="chat-layout">
+
+  <!-- Sidebar: selected symptoms -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-title">Selected Symptoms</div>
+      <div class="selected-symptoms" id="selected-symptoms">
+        <span style="color:#4a5568; font-size:0.82rem;">None yet — type below to add</span>
+      </div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="symptom-count" id="symptom-count">Select at least <strong>3</strong> symptoms</div>
+    <button class="predict-btn" id="predict-btn" disabled>⚡ Predict Now</button>
+    <button class="reset-btn" id="reset-btn">🔄 Start Over</button>
+  </aside>
+
+  <!-- Chat -->
+  <div class="chat-area">
+    <div class="messages" id="messages"></div>
+
+    <div class="input-area">
+      <div class="input-row">
+        <div class="input-wrap">
+          <input type="text" id="symptom-input" placeholder="Type a symptom (e.g. headache, fever)…" autocomplete="off">
+          <div id="dropdown"></div>
+        </div>
+        <button class="send-btn" id="send-btn">➤</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SYMPTOMS = {{ symptoms|safe }};
+const USERNAME = "{{ request.user.username }}";
+let selected = [];
+let step = 0;
+
+const messagesEl = document.getElementById('messages');
+const input = document.getElementById('symptom-input');
+const dropdown = document.getElementById('dropdown');
+const predictBtn = document.getElementById('predict-btn');
+const resetBtn = document.getElementById('reset-btn');
+const selectedEl = document.getElementById('selected-symptoms');
+const countEl = document.getElementById('symptom-count');
+
+const RANK_LABELS = ['🥇 Primary Match', '🥈 Secondary Match', '🥉 Third Possibility'];
+const SEV_COLORS = { Mild:'#22c55e', Moderate:'#f59e0b', Severe:'#ef4444' };
+const PREC_ICONS = ['💊','🥗','🛌','🩺'];
+
+// ── Messages ─────────────────────────────────────────────────────────────────
+function addMsg(text, type='bot', chips=[], html='') {
+  const msg = document.createElement('div');
+  msg.className = `msg ${type}`;
+  const avatar = type === 'bot'
+    ? '<div class="msg-avatar">🩺</div>'
+    : `<div class="msg-avatar">${USERNAME[0].toUpperCase()}</div>`;
+  const content = html || `<p>${text}</p>`;
+  msg.innerHTML = `${avatar}<div><div class="msg-bubble">${content}${chips.length ? buildChips(chips) : ''}</div></div>`;
+  messagesEl.appendChild(msg);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return msg;
+}
+
+function buildChips(chips) {
+  return `<div class="chips">${chips.map(c =>
+    `<span class="chip" onclick="addSymptomFromChip('${c}')">${c}</span>`
+  ).join('')}</div>`;
+}
+
+function addTyping() {
+  const msg = document.createElement('div');
+  msg.className = 'msg bot';
+  msg.id = 'typing-indicator';
+  msg.innerHTML = `<div class="msg-avatar">🩺</div><div class="msg-bubble"><div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  messagesEl.appendChild(msg);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+}
+
+// ── Sidebar ───────────────────────────────────────────────────────────────────
+function updateSidebar() {
+  if (selected.length === 0) {
+    selectedEl.innerHTML = '<span style="color:#4a5568;font-size:0.82rem;">None yet — type below to add</span>';
+  } else {
+    selectedEl.innerHTML = selected.map(s =>
+      `<div class="sym-tag">${s} <span onclick="removeSymptom('${s}')">×</span></div>`
+    ).join('');
+  }
+  const remaining = Math.max(0, 3 - selected.length);
+  countEl.innerHTML = remaining > 0
+    ? `Select at least <strong>${remaining}</strong> more symptom${remaining > 1 ? 's' : ''}`
+    : `<strong style="color:#22c55e">${selected.length} symptoms selected ✓</strong>`;
+  predictBtn.disabled = selected.length < 3;
+}
+
+function removeSymptom(s) {
+  selected = selected.filter(x => x !== s);
+  updateSidebar();
+}
+
+// ── Dropdown ──────────────────────────────────────────────────────────────────
+input.addEventListener('input', () => {
+  const q = input.value.toLowerCase();
+  if (!q) { dropdown.classList.remove('open'); return; }
+  const matches = SYMPTOMS.filter(s => s.toLowerCase().includes(q) && !selected.includes(s)).slice(0, 7);
+  if (!matches.length) { dropdown.classList.remove('open'); return; }
+  dropdown.innerHTML = matches.map(s => `<div class="dd-item" onclick="addSymptomFromInput('${s}')">${s}</div>`).join('');
+  dropdown.classList.add('open');
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.input-wrap')) dropdown.classList.remove('open');
+});
+
+function addSymptomFromInput(s) {
+  if (!selected.includes(s)) {
+    selected.push(s);
+    updateSidebar();
+    addMsg(s, 'user');
+    setTimeout(() => botRespond(s), 600);
+  }
+  input.value = '';
+  dropdown.classList.remove('open');
+  input.focus();
+}
+
+function addSymptomFromChip(s) {
+  if (selected.includes(s)) return;
+  selected.push(s);
+  updateSidebar();
+  addMsg(s, 'user');
+  setTimeout(() => botRespond(s), 600);
+  // Mark chip as selected
+  document.querySelectorAll('.chip').forEach(c => {
+    if (c.textContent === s) c.classList.add('selected');
+  });
+}
+
+// ── Send button ───────────────────────────────────────────────────────────────
+document.getElementById('send-btn').addEventListener('click', () => {
+  const val = input.value.trim();
+  if (!val) return;
+  const match = SYMPTOMS.find(s => s.toLowerCase() === val.toLowerCase());
+  if (match) {
+    addSymptomFromInput(match);
+  } else {
+    const partials = SYMPTOMS.filter(s => s.toLowerCase().includes(val.toLowerCase()) && !selected.includes(s));
+    if (partials.length === 1) {
+      addSymptomFromInput(partials[0]);
+    } else if (partials.length > 1) {
+      addMsg(val, 'user');
+      setTimeout(() => {
+        addMsg('', 'bot', [], `<p>I found a few matches. Which one did you mean?</p>${buildChips(partials.slice(0, 5))}`);
+      }, 400);
+      input.value = '';
+    } else {
+      addMsg(val, 'user');
+      setTimeout(() => addMsg(`I don't recognize "${val}". Please try typing a different symptom.`, 'bot'), 400);
+      input.value = '';
+    }
+  }
+});
+
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('send-btn').click();
+});
+
+// ── Bot response logic ────────────────────────────────────────────────────────
+const SUGGESTIONS = {
+  1: ['Fever', 'Headache', 'Fatigue', 'Cough', 'Nausea'],
+  2: ['Vomiting', 'Chills', 'Sweating', 'Back Pain', 'Dizziness'],
+  3: ['Loss Of Appetite', 'Joint Pain', 'Skin Rash', 'Breathlessness', 'Chest Pain'],
+};
+
+function botRespond(symptom) {
+  addTyping();
+  setTimeout(() => {
+    removeTyping();
+    step++;
+    if (selected.length === 1) {
+      addMsg('', 'bot', [], `<p>Got it — <strong>${symptom}</strong> noted! 📝<br>Let's narrow it down. Do you also have any of these?</p>${buildChips(SUGGESTIONS[1])}`);
+    } else if (selected.length === 2) {
+      addMsg('', 'bot', [], `<p>Added <strong>${symptom}</strong>. You need 1 more symptom minimum. Common ones:</p>${buildChips(SUGGESTIONS[2])}`);
+    } else if (selected.length === 3) {
+      addMsg('', 'bot', [], `<p>Great — you have <strong>3 symptoms</strong>! You can predict now or add more for better accuracy.</p>${buildChips(SUGGESTIONS[3])}`);
+    } else if (selected.length <= 6) {
+      const extras = SYMPTOMS.filter(s => !selected.includes(s)).slice(0, 5);
+      addMsg('', 'bot', [], `<p>Added <strong>${symptom}</strong>. Keep adding or hit <strong>⚡ Predict Now</strong> when ready.</p>${buildChips(extras)}`);
+    } else {
+      addMsg(`Added ${symptom}. You have ${selected.length} symptoms — that's a solid dataset! Hit ⚡ Predict Now.`, 'bot');
+    }
+  }, 800);
+}
+
+// ── Predict ───────────────────────────────────────────────────────────────────
+predictBtn.addEventListener('click', async () => {
+  addMsg(`Analyzing ${selected.length} symptoms...`, 'user');
+  addTyping();
+  predictBtn.disabled = true;
+
+  try {
+    const res = await fetch('/predict/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ symptoms: selected })
+    });
+    const data = await res.json();
+    removeTyping();
+
+    if (data.error) {
+      addMsg(data.error, 'bot');
+      predictBtn.disabled = false;
+      return;
+    }
+
+    // Build result HTML
+    let html = `<p>🎯 Based on your <strong>${selected.length} symptoms</strong>, here are my predictions:</p>`;
+    data.predictions.forEach((p, i) => {
+      const c = SEV_COLORS[p.severity] || '#94a3b8';
+      html += `
+        <div class="result-card">
+          <div class="result-rank">${RANK_LABELS[i]}</div>
+          <div class="result-disease">${p.disease}</div>
+          <div class="result-row">
+            <span class="conf-val" style="color:${c}">${p.confidence}%</span>
+            <span class="sev-badge" style="background:${c}22;color:${c};border:1px solid ${c}44">${p.severity}</span>
+            <div class="conf-bar"><div class="conf-fill" style="width:${p.confidence}%"></div></div>
+          </div>
+          <div class="prec-list">
+            ${p.precautions.map((pr,j) => `<div class="prec-item"><span class="prec-dot">${PREC_ICONS[j]||'✓'}</span>${pr}</div>`).join('')}
+          </div>
+        </div>`;
+    });
+    html += `<p style="margin-top:0.75rem;font-size:0.82rem;color:#64748b;">⚠️ This is not a medical diagnosis. Always consult a doctor.</p>`;
+
+    addMsg('', 'bot', [], html);
+
+    setTimeout(() => {
+      addMsg('', 'bot', [], `<p>Would you like to check different symptoms?</p><div class="chips"><span class="chip" onclick="resetChat()">🔄 Start Over</span><span class="chip" onclick="window.location='/history/'">📋 View History</span><span class="chip" onclick="window.location='/history/${data.predictions[0]?.disease ? '' : ''}'">⬇ Export PDF</span></div>`);
+    }, 1000);
+
+  } catch(e) {
+    removeTyping();
+    addMsg('Something went wrong. Please try again.', 'bot');
+  }
+  predictBtn.disabled = selected.length < 3;
+});
+
+// ── Reset ─────────────────────────────────────────────────────────────────────
+function resetChat() {
+  selected = [];
+  step = 0;
+  updateSidebar();
+  messagesEl.innerHTML = '';
+  startChat();
+}
+
+resetBtn.addEventListener('click', resetChat);
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+function startChat() {
+  setTimeout(() => {
+    addMsg('', 'bot', [], `<p>👋 Hi <strong>${USERNAME}</strong>! I'm MediPredict's symptom checker.</p><p style="margin-top:0.5rem;">Tell me your symptoms one by one and I'll predict possible conditions. What's bothering you today?</p>`);
+  }, 300);
+  setTimeout(() => {
+    addMsg('', 'bot', [], `<p>Start by selecting a symptom below, or type one in the box:</p>${buildChips(['Headache', 'Fever', 'Cough', 'Fatigue', 'Nausea', 'Vomiting', 'Chest Pain', 'Joint Pain'])}`);
+  }, 1200);
+}
+
+startChat();
+</script>
+</body>
+</html>

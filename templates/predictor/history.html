@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History — MediPredict</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0e1a; color:#e2e8f0; font-family:'DM Sans',sans-serif; min-height:100vh; }
+  header {
+    border-bottom:1px solid #1e2d45; padding:1.2rem 2rem;
+    display:flex; align-items:center; gap:0.75rem;
+    background:rgba(10,14,26,0.85); position:sticky; top:0; z-index:100;
+  }
+  .logo-icon { width:38px; height:38px; background:linear-gradient(135deg,#00d4ff,#7c3aed); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+  .logo-text { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; }
+  .logo-text span { color:#00d4ff; }
+  .nav-links { margin-left:auto; display:flex; gap:1rem; align-items:center; }
+  .nav-links a { color:#64748b; text-decoration:none; font-size:0.88rem; transition:color 0.2s; }
+  .nav-links a:hover { color:#00d4ff; }
+  .nav-links a.active { color:#00d4ff; }
+  .user-badge { background:rgba(0,212,255,0.1); border:1px solid rgba(0,212,255,0.25); color:#00d4ff; font-size:0.78rem; padding:0.3rem 0.8rem; border-radius:100px; }
+  main { max-width:960px; margin:0 auto; padding:3rem 1.5rem; }
+  h1 { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; margin-bottom:0.4rem; }
+  .subtitle { color:#64748b; margin-bottom:2rem; }
+  .empty { text-align:center; padding:4rem; color:#64748b; }
+  .empty-icon { font-size:3rem; margin-bottom:1rem; }
+
+  .record {
+    background:#111827; border:1px solid #1e2d45;
+    border-radius:14px; padding:1.1rem 1.5rem;
+    margin-bottom:0.75rem; display:flex;
+    align-items:center; gap:1.25rem;
+    transition:border-color 0.2s;
+  }
+  .record:hover { border-color:rgba(0,212,255,0.3); }
+  .record-date { color:#64748b; font-size:0.78rem; min-width:100px; line-height:1.5; }
+  .record-disease { font-family:'Syne',sans-serif; font-weight:700; font-size:0.95rem; flex:1; }
+  .record-symptoms { color:#64748b; font-size:0.8rem; flex:2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .record-conf { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; min-width:55px; text-align:right; }
+  .sev { padding:0.22rem 0.65rem; border-radius:100px; font-size:0.72rem; font-weight:600; white-space:nowrap; }
+
+  .pdf-btn {
+    display:inline-flex; align-items:center; gap:0.3rem;
+    color:#64748b; font-size:0.78rem; text-decoration:none;
+    padding:0.35rem 0.75rem; border:1px solid #1e2d45;
+    border-radius:8px; transition:all 0.2s; white-space:nowrap;
+    flex-shrink:0;
+  }
+  .pdf-btn:hover { border-color:#00d4ff; color:#00d4ff; background:rgba(0,212,255,0.06); }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-icon">🩺</div>
+  <div class="logo-text">Medi<span>Predict</span></div>
+  <div class="nav-links">
+    <a href="/">Predict</a>
+    <a href="/history/" class="active">History</a>
+    <a href="/about/">About</a>
+    <a href="/stats/">Stats</a>
+    <a href="/profile/">Profile</a>
+    <span class="user-badge">{{ request.user.username }}</span>
+    <a href="/logout/">Logout</a>
+  </div>
+</header>
+
+<main>
+  <h1>Prediction History</h1>
+  <p class="subtitle">All your past predictions — {{ predictions.count }} total</p>
+
+  {% if predictions %}
+    {% for p in predictions %}
+
+    {% if p.severity == 'Mild' %}
+    <div class="record">
+      <div class="record-date">{{ p.created_at|date:"M d, Y" }}<br><small>{{ p.created_at|time:"h:i A" }}</small></div>
+      <div class="record-disease">{{ p.disease }}</div>
+      <div class="record-symptoms">{{ p.symptoms }}</div>
+      <div><span class="sev" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">Mild</span></div>
+      <div class="record-conf" style="color:#22c55e">{{ p.confidence }}%</div>
+      <a href="/history/{{ p.id }}/export/" class="pdf-btn">⬇ PDF</a>
+    </div>
+
+    {% elif p.severity == 'Moderate' %}
+    <div class="record">
+      <div class="record-date">{{ p.created_at|date:"M d, Y" }}<br><small>{{ p.created_at|time:"h:i A" }}</small></div>
+      <div class="record-disease">{{ p.disease }}</div>
+      <div class="record-symptoms">{{ p.symptoms }}</div>
+      <div><span class="sev" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">Moderate</span></div>
+      <div class="record-conf" style="color:#f59e0b">{{ p.confidence }}%</div>
+      <a href="/history/{{ p.id }}/export/" class="pdf-btn">⬇ PDF</a>
+    </div>
+
+    {% else %}
+    <div class="record">
+      <div class="record-date">{{ p.created_at|date:"M d, Y" }}<br><small>{{ p.created_at|time:"h:i A" }}</small></div>
+      <div class="record-disease">{{ p.disease }}</div>
+      <div class="record-symptoms">{{ p.symptoms }}</div>
+      <div><span class="sev" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">Severe</span></div>
+      <div class="record-conf" style="color:#ef4444">{{ p.confidence }}%</div>
+      <a href="/history/{{ p.id }}/export/" class="pdf-btn">⬇ PDF</a>
+    </div>
+    {% endif %}
+
+    {% endfor %}
+  {% else %}
+    <div class="empty">
+      <div class="empty-icon">🔍</div>
+      <p>No predictions yet. Go make your first one!</p>
+      <br>
+      <a href="/" style="color:#00d4ff">← Go to Predictor</a>
+    </div>
+  {% endif %}
+</main>
+</body>
+</html>

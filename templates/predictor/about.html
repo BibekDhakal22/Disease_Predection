@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — MediPredict</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0e1a; color:#e2e8f0; font-family:'DM Sans',sans-serif; min-height:100vh; background-image:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(0,212,255,0.08),transparent); }
+  header { border-bottom:1px solid #1e2d45; padding:1.2rem 2rem; display:flex; align-items:center; gap:0.75rem; background:rgba(10,14,26,0.85); position:sticky; top:0; z-index:100; backdrop-filter:blur(10px); }
+  .logo-icon { width:38px; height:38px; background:linear-gradient(135deg,#00d4ff,#7c3aed); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+  .logo-text { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; }
+  .logo-text span { color:#00d4ff; }
+  .nav-links { margin-left:auto; display:flex; gap:1rem; align-items:center; }
+  .nav-links a { color:#64748b; text-decoration:none; font-size:0.88rem; transition:color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color:#00d4ff; }
+  .user-badge { background:rgba(0,212,255,0.1); border:1px solid rgba(0,212,255,0.25); color:#00d4ff; font-size:0.78rem; padding:0.3rem 0.8rem; border-radius:100px; }
+
+  main { max-width:900px; margin:0 auto; padding:4rem 1.5rem; }
+
+  /* Hero */
+  .hero { text-align:center; margin-bottom:5rem; }
+  .hero-badge { display:inline-block; background:rgba(0,212,255,0.1); border:1px solid rgba(0,212,255,0.25); color:#00d4ff; font-size:0.78rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; padding:0.4rem 1rem; border-radius:100px; margin-bottom:1.5rem; }
+  .hero h1 { font-family:'Syne',sans-serif; font-size:clamp(2.2rem,5vw,3.5rem); font-weight:800; line-height:1.1; margin-bottom:1.25rem; }
+  .hero h1 span { background:linear-gradient(90deg,#00d4ff,#7c3aed); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .hero p { color:#64748b; font-size:1.05rem; max-width:560px; margin:0 auto 2rem; line-height:1.7; }
+  .hero-btns { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+  .btn-primary { background:linear-gradient(135deg,#00d4ff,#7c3aed); color:white; padding:0.8rem 2rem; border-radius:12px; text-decoration:none; font-family:'Syne',sans-serif; font-weight:700; font-size:0.95rem; transition:opacity 0.2s; }
+  .btn-primary:hover { opacity:0.9; }
+  .btn-ghost { background:transparent; border:1px solid #1e2d45; color:#94a3b8; padding:0.8rem 2rem; border-radius:12px; text-decoration:none; font-size:0.95rem; transition:all 0.2s; }
+  .btn-ghost:hover { border-color:#00d4ff; color:#00d4ff; }
+
+  /* How it works */
+  .section-title { font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:800; margin-bottom:0.5rem; }
+  .section-sub { color:#64748b; margin-bottom:2.5rem; }
+
+  .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-bottom:5rem; }
+  .step { background:#111827; border:1px solid #1e2d45; border-radius:16px; padding:1.75rem; position:relative; overflow:hidden; }
+  .step::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,#00d4ff,#7c3aed); }
+  .step-num { font-family:'Syne',sans-serif; font-size:2.5rem; font-weight:800; color:rgba(0,212,255,0.15); margin-bottom:0.75rem; }
+  .step-icon { font-size:1.75rem; margin-bottom:0.75rem; }
+  .step h3 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; margin-bottom:0.5rem; }
+  .step p { color:#64748b; font-size:0.88rem; line-height:1.6; }
+
+  /* Tech stack */
+  .tech-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:5rem; }
+  .tech-card { background:#111827; border:1px solid #1e2d45; border-radius:14px; padding:1.5rem; display:flex; align-items:center; gap:1rem; transition:border-color 0.2s; }
+  .tech-card:hover { border-color:rgba(0,212,255,0.3); }
+  .tech-icon { font-size:2rem; flex-shrink:0; }
+  .tech-name { font-family:'Syne',sans-serif; font-weight:700; font-size:0.95rem; margin-bottom:0.2rem; }
+  .tech-desc { color:#64748b; font-size:0.8rem; }
+
+  /* Stats */
+  .stats-banner { background:linear-gradient(135deg,rgba(0,212,255,0.08),rgba(124,58,237,0.08)); border:1px solid rgba(0,212,255,0.15); border-radius:20px; padding:3rem; display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; text-align:center; margin-bottom:5rem; }
+  .stat-val { font-family:'Syne',sans-serif; font-size:2.5rem; font-weight:800; background:linear-gradient(90deg,#00d4ff,#7c3aed); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:0.3rem; }
+  .stat-label { color:#64748b; font-size:0.82rem; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; }
+
+  /* Team / About card */
+  .about-card { background:#111827; border:1px solid #1e2d45; border-radius:20px; padding:2.5rem; display:flex; gap:2rem; align-items:center; margin-bottom:5rem; }
+  .about-avatar { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#00d4ff,#7c3aed); display:flex; align-items:center; justify-content:center; font-size:2rem; flex-shrink:0; }
+  .about-info h3 { font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:800; margin-bottom:0.4rem; }
+  .about-info p { color:#64748b; line-height:1.7; font-size:0.92rem; }
+  .about-tags { display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.75rem; }
+  .tag { background:rgba(0,212,255,0.1); border:1px solid rgba(0,212,255,0.2); color:#00d4ff; padding:0.25rem 0.75rem; border-radius:100px; font-size:0.75rem; font-weight:600; }
+
+  /* Disclaimer */
+  .disclaimer { background:rgba(245,158,11,0.07); border:1px solid rgba(245,158,11,0.2); border-radius:14px; padding:1.25rem 1.5rem; display:flex; gap:0.75rem; color:#fbbf24; font-size:0.85rem; line-height:1.6; }
+
+  footer { text-align:center; padding:2rem; color:#64748b; font-size:0.8rem; border-top:1px solid #1e2d45; margin-top:2rem; }
+  footer strong { color:#00d4ff; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-icon">🩺</div>
+  <div class="logo-text">Medi<span>Predict</span></div>
+  <div class="nav-links">
+    <a href="/">Predict</a>
+    <a href="/history/">History</a>
+    <a href="/about/" class="active">About</a>
+    <a href="/stats/">Stats</a>
+    {% if user.is_authenticated %}
+    <a href="/profile/">Profile</a>
+    <span class="user-badge">{{ request.user.username }}</span>
+    <a href="/logout/">Logout</a>
+    {% else %}
+    <a href="/login/">Login</a>
+    {% endif %}
+  </div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-badge">🎓 TU BCA Final Year Project — 2021 Batch</div>
+    <h1>AI-Powered<br><span>Disease Prediction</span><br>System</h1>
+    <p>MediPredict uses a trained Random Forest machine learning model to analyze your symptoms and predict possible diseases — helping you understand your health better.</p>
+    <div class="hero-btns">
+      <a href="/" class="btn-primary">⚡ Try the Predictor</a>
+      <a href="/stats/" class="btn-ghost">📊 View Model Stats</a>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="section-title">How It Works</div>
+  <div class="section-sub">Three simple steps to get your prediction</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon">🔍</div>
+      <h3>Select Symptoms</h3>
+      <p>Search and select your symptoms from a list of 132 medically recognized symptoms using our live search.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon">🤖</div>
+      <h3>AI Analysis</h3>
+      <p>Our Random Forest model — trained on 41 diseases — analyzes your symptom pattern and calculates probabilities.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon">📋</div>
+      <h3>Get Results</h3>
+      <p>Receive the top 3 predicted conditions with confidence scores, severity ratings, and recommended precautions.</p>
+    </div>
+  </div>
+
+  <!-- Stats banner -->
+  <div class="stats-banner">
+    <div>
+      <div class="stat-val">99.6%</div>
+      <div class="stat-label">Model Accuracy</div>
+    </div>
+    <div>
+      <div class="stat-val">41</div>
+      <div class="stat-label">Diseases</div>
+    </div>
+    <div>
+      <div class="stat-val">132</div>
+      <div class="stat-label">Symptoms</div>
+    </div>
+    <div>
+      <div class="stat-val">200</div>
+      <div class="stat-label">Decision Trees</div>
+    </div>
+  </div>
+
+  <!-- Tech stack -->
+  <div class="section-title">Technology Stack</div>
+  <div class="section-sub">Built with modern, industry-standard tools</div>
+  <div class="tech-grid">
+    <div class="tech-card">
+      <div class="tech-icon">🐍</div>
+      <div><div class="tech-name">Python 3.14</div><div class="tech-desc">Core programming language</div></div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🌐</div>
+      <div><div class="tech-name">Django 6.0</div><div class="tech-desc">Web framework & backend</div></div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🤖</div>
+      <div><div class="tech-name">Scikit-learn</div><div class="tech-desc">Random Forest ML model</div></div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🗄️</div>
+      <div><div class="tech-name">SQLite</div><div class="tech-desc">Database for user data</div></div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">📊</div>
+      <div><div class="tech-name">Pandas & NumPy</div><div class="tech-desc">Data processing</div></div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">💾</div>
+      <div><div class="tech-name">Joblib</div><div class="tech-desc">Model serialization</div></div>
+    </div>
+  </div>
+
+  <!-- Developer -->
+  <div class="section-title">Developer</div>
+  <div class="section-sub">Built as a TU BCA Final Year Project</div>
+  <div class="about-card">
+    <div class="about-avatar">👨‍💻</div>
+    <div class="about-info">
+      <h3>{{ request.user.get_full_name|default:request.user.username|default:"BCA Student" }}</h3>
+      <p>This project was developed as a Final Year Project (Project III — CAPJ452) for the Bachelor of Computer Application program at Tribhuvan University, Faculty of Humanities and Social Sciences, 2021 Batch.</p>
+      <div class="about-tags">
+        <span class="tag">TU BCA 2021</span>
+        <span class="tag">Machine Learning</span>
+        <span class="tag">Django</span>
+        <span class="tag">Python</span>
+        <span class="tag">Random Forest</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <span style="font-size:1.1rem;flex-shrink:0;">⚠️</span>
+    <div><strong>Medical Disclaimer:</strong> MediPredict is an educational tool built for academic purposes. It is NOT a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider for any medical concerns.</div>
+  </div>
+</main>
+
+<footer>
+  MediPredict &nbsp;|&nbsp; TU BCA Final Year Project 2026 &nbsp;|&nbsp; Built with <strong>Django + Random Forest</strong>
+</footer>
+</body>
+</html>

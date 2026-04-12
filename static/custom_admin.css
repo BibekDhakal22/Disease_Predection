@@ -1,0 +1,284 @@
+{% extends "admin/base.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --surface2: #f1f5f9;
+  --border: #e2e8f0;
+  --accent: #6366f1;
+  --accent2: #8b5cf6;
+  --green: #10b981;
+  --red: #ef4444;
+  --amber: #f59e0b;
+  --text: #0f172a;
+  --muted: #94a3b8;
+  --subtle: #64748b;
+}
+
+html, body {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: 'DM Sans', sans-serif !important;
+}
+
+/* ── Header ── */
+#header {
+  background: #ffffff !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 14px 28px !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+}
+#branding h1 a, #branding h1 a:visited {
+  color: var(--text) !important;
+  font-family: 'Syne', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 1.1rem !important;
+}
+#user-tools { color: var(--muted) !important; font-size: 0.82rem !important; }
+#user-tools a { color: var(--subtle) !important; text-decoration: none !important; }
+#user-tools a:hover { color: var(--accent) !important; }
+
+/* ── Breadcrumbs ── */
+div.breadcrumbs {
+  background: var(--surface2) !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--subtle) !important;
+  padding: 9px 28px !important;
+  font-size: 0.8rem !important;
+}
+div.breadcrumbs a { color: var(--accent) !important; text-decoration: none !important; }
+
+/* ── Sidebar ── */
+#nav-sidebar {
+  background: var(--surface) !important;
+  border-right: 1px solid var(--border) !important;
+}
+.sticky {
+  background: var(--surface) !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 10px 12px !important;
+}
+#nav-sidebar input {
+  background: var(--bg) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  border-radius: 6px !important;
+  padding: 5px 10px !important;
+  font-size: 0.82rem !important;
+  width: 90% !important;
+  outline: none !important;
+}
+#nav-sidebar a {
+  color: var(--subtle) !important;
+  font-size: 0.85rem !important;
+  padding: 5px 12px !important;
+  display: block !important;
+  text-decoration: none !important;
+  border-radius: 6px !important;
+  margin: 1px 4px !important;
+  transition: all 0.15s !important;
+}
+#nav-sidebar a:hover { background: #f1f5f9 !important; color: var(--accent) !important; }
+.current-app .section { font-weight: 700 !important; color: var(--accent) !important; }
+.current-app { background: #eef2ff !important; border-left: 2px solid var(--accent) !important; }
+.current-model > a { color: var(--accent) !important; font-weight: 600 !important; }
+
+/* ── Main ── */
+#content, #content-main, .colMS, #container { background: var(--bg) !important; }
+#content { padding: 24px 28px !important; }
+#content h1 {
+  color: var(--text) !important;
+  font-family: 'Syne', sans-serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding-bottom: 14px !important;
+  margin-bottom: 20px !important;
+}
+
+/* ── Module cards ── */
+.module {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+  margin-bottom: 16px !important;
+}
+.module caption, .module > h2 {
+  background: var(--surface2) !important;
+  color: var(--subtle) !important;
+  font-family: 'Syne', sans-serif !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  padding: 10px 16px !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.module td, .module th {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  padding: 11px 16px !important;
+  font-size: 0.88rem !important;
+}
+.module tr:last-child td { border-bottom: none !important; }
+.module td a { color: var(--text) !important; text-decoration: none !important; font-weight: 500 !important; }
+.module td a:hover { color: var(--accent) !important; }
+.addlink { color: var(--green) !important; font-size: 0.8rem !important; margin-left: 8px !important; font-weight: 600 !important; }
+.changelink { color: var(--accent) !important; font-size: 0.8rem !important; margin-left: 4px !important; }
+
+/* ── Recent actions ── */
+#recent-actions-module h2 { color: var(--subtle) !important; }
+.actionlist { padding: 0 !important; margin: 0 !important; }
+.actionlist li { border-bottom: 1px solid var(--border) !important; padding: 9px 16px !important; color: var(--subtle) !important; font-size: 0.84rem !important; list-style: none !important; }
+.actionlist li:last-child { border-bottom: none !important; }
+.actionlist li a { color: var(--accent) !important; }
+
+/* ── Change list ── */
+#changelist {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+}
+#changelist table { background: transparent !important; width: 100% !important; border-collapse: collapse !important; }
+#changelist thead th {
+  background: var(--surface2) !important;
+  color: var(--subtle) !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 10px 14px !important;
+}
+#changelist thead th a, #changelist thead th a:visited { color: var(--subtle) !important; text-decoration: none !important; }
+#changelist thead th a:hover { color: var(--accent) !important; }
+#changelist tbody tr { border-bottom: 1px solid #f1f5f9 !important; }
+#changelist tbody tr:hover td { background: #f8f7ff !important; }
+#changelist tbody td { background: transparent !important; color: var(--text) !important; padding: 11px 14px !important; font-size: 0.88rem !important; border: none !important; }
+#changelist tbody td a { color: var(--accent) !important; text-decoration: none !important; font-weight: 500 !important; }
+#changelist tbody td a:hover { color: var(--accent2) !important; }
+.row1, .row2 { background: transparent !important; }
+
+/* ── Toolbar ── */
+#toolbar { background: var(--surface2) !important; border-bottom: 1px solid var(--border) !important; padding: 10px 14px !important; }
+#searchbar, #toolbar input[type=text] {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 7px !important;
+  color: var(--text) !important;
+  padding: 6px 12px !important;
+  font-size: 0.88rem !important;
+  outline: none !important;
+}
+#searchbar:focus { border-color: var(--accent) !important; box-shadow: 0 0 0 3px rgba(99,102,241,0.1) !important; }
+#toolbar input[type=submit] {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  border-radius: 7px !important;
+  padding: 6px 14px !important;
+  cursor: pointer !important;
+  font-size: 0.85rem !important;
+}
+#toolbar input[type=submit]:hover { border-color: var(--accent) !important; color: var(--accent) !important; }
+
+/* ── Filters ── */
+#changelist-filter { background: var(--surface) !important; border-left: 1px solid var(--border) !important; }
+#changelist-filter h2 { background: var(--surface2) !important; color: var(--subtle) !important; font-family: 'Syne', sans-serif !important; font-size: 0.7rem !important; letter-spacing: 0.1em !important; text-transform: uppercase !important; padding: 10px 14px !important; border-bottom: 1px solid var(--border) !important; }
+#changelist-filter h3 { color: var(--muted) !important; font-size: 0.7rem !important; text-transform: uppercase !important; letter-spacing: 0.08em !important; margin: 12px 14px 4px !important; }
+#changelist-filter ul { padding: 0 14px 10px !important; margin: 0 !important; }
+#changelist-filter li { list-style: none !important; padding: 3px 0 !important; }
+#changelist-filter a { color: var(--subtle) !important; font-size: 0.85rem !important; text-decoration: none !important; }
+#changelist-filter a:hover { color: var(--accent) !important; }
+#changelist-filter li.selected a { color: var(--accent) !important; font-weight: 600 !important; }
+
+/* ── Actions bar ── */
+.actions { background: var(--surface2) !important; border: 1px solid var(--border) !important; border-radius: 8px !important; padding: 8px 14px !important; margin-bottom: 8px !important; }
+.actions select { background: var(--surface) !important; border: 1px solid var(--border) !important; color: var(--text) !important; border-radius: 6px !important; padding: 4px 8px !important; font-size: 0.85rem !important; }
+.actions label { color: var(--subtle) !important; font-size: 0.85rem !important; }
+
+/* ── Buttons ── */
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+  background: var(--accent) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  color: white !important;
+  font-family: 'Syne', sans-serif !important;
+  font-weight: 700 !important;
+  padding: 7px 18px !important;
+  cursor: pointer !important;
+  font-size: 0.85rem !important;
+  text-decoration: none !important;
+  transition: opacity 0.15s !important;
+}
+.button:hover { opacity: 0.88 !important; }
+.object-tools a {
+  background: #eef2ff !important;
+  border: 1px solid #c7d2fe !important;
+  color: var(--accent) !important;
+  border-radius: 8px !important;
+  padding: 6px 14px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+}
+.object-tools a:hover { background: #e0e7ff !important; }
+
+/* ── Submit row ── */
+.submit-row { background: var(--surface2) !important; border-top: 1px solid var(--border) !important; padding: 12px 16px !important; }
+
+/* ── Paginator ── */
+.paginator { background: var(--surface) !important; border-top: 1px solid var(--border) !important; color: var(--muted) !important; padding: 10px 14px !important; font-size: 0.85rem !important; }
+.paginator a { color: var(--accent) !important; text-decoration: none !important; }
+.paginator .this-page { background: var(--accent) !important; color: white !important; border-radius: 4px !important; padding: 2px 7px !important; font-weight: 700 !important; }
+
+/* ── Messages ── */
+.messagelist li { border-radius: 8px !important; padding: 10px 16px !important; font-size: 0.88rem !important; margin-bottom: 8px !important; list-style: none !important; }
+li.success { background: #ecfdf5 !important; border: 1px solid #a7f3d0 !important; color: #065f46 !important; }
+li.error { background: #fef2f2 !important; border: 1px solid #fecaca !important; color: #991b1b !important; }
+li.warning { background: #fffbeb !important; border: 1px solid #fde68a !important; color: #92400e !important; }
+
+/* ── Form fields ── */
+.form-row { border-bottom: 1px solid var(--border) !important; padding: 12px 0 !important; }
+input[type=text], input[type=password], input[type=email], input[type=number], select, textarea {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  color: var(--text) !important;
+  padding: 7px 12px !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 0.9rem !important;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.12) !important;
+  outline: none !important;
+}
+label { color: var(--subtle) !important; font-size: 0.85rem !important; }
+.help { color: var(--muted) !important; font-size: 0.8rem !important; }
+.readonly { color: var(--muted) !important; }
+input[type=checkbox] { accent-color: var(--accent) !important; }
+
+/* ── Inline groups ── */
+.inline-group { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 12px !important; overflow: hidden !important; margin-top: 16px !important; }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+  <a href="{% url 'admin:index' %}" style="display:flex;align-items:center;gap:0.6rem;text-decoration:none;">
+    <span style="width:30px;height:30px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:0.95rem;">🩺</span>
+    <span style="font-family:'Syne',sans-serif;font-weight:800;color:#0f172a;letter-spacing:-0.01em;">MediPredict</span>
+    <span style="font-size:0.65rem;background:#eef2ff;border:1px solid #c7d2fe;color:#6366f1;padding:2px 8px;border-radius:6px;font-weight:700;letter-spacing:0.05em;">ADMIN</span>
+  </a>
+</h1>
+{% endblock %}

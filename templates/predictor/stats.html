@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Model Stats — MediPredict</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0a0e1a; color:#e2e8f0; font-family:'DM Sans',sans-serif; min-height:100vh; background-image:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(0,212,255,0.07),transparent); }
+  header { border-bottom:1px solid #1e2d45; padding:1.2rem 2rem; display:flex; align-items:center; gap:0.75rem; background:rgba(10,14,26,0.85); position:sticky; top:0; z-index:100; backdrop-filter:blur(10px); }
+  .logo-icon { width:38px; height:38px; background:linear-gradient(135deg,#00d4ff,#7c3aed); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+  .logo-text { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; }
+  .logo-text span { color:#00d4ff; }
+  .nav-links { margin-left:auto; display:flex; gap:1rem; align-items:center; }
+  .nav-links a { color:#64748b; text-decoration:none; font-size:0.88rem; transition:color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color:#00d4ff; }
+  .user-badge { background:rgba(0,212,255,0.1); border:1px solid rgba(0,212,255,0.25); color:#00d4ff; font-size:0.78rem; padding:0.3rem 0.8rem; border-radius:100px; }
+
+  main { max-width:960px; margin:0 auto; padding:3rem 1.5rem; }
+
+  .page-header { margin-bottom:2.5rem; }
+  .page-header h1 { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; margin-bottom:0.4rem; }
+  .page-header p { color:#64748b; }
+
+  /* Model info cards */
+  .model-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem; }
+  .model-card { background:#111827; border:1px solid #1e2d45; border-radius:14px; padding:1.4rem; text-align:center; position:relative; overflow:hidden; animation:fadeUp 0.4s ease both; }
+  .model-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--c); }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .model-card:nth-child(1){animation-delay:.05s} .model-card:nth-child(2){animation-delay:.1s} .model-card:nth-child(3){animation-delay:.15s} .model-card:nth-child(4){animation-delay:.2s}
+  .card-val { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:var(--c); margin-bottom:0.25rem; }
+  .card-lbl { font-size:0.75rem; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; }
+  .card-icon { font-size:1.4rem; margin-bottom:0.6rem; }
+
+  /* Two col layout */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-bottom:1.25rem; }
+  .panel { background:#111827; border:1px solid #1e2d45; border-radius:16px; overflow:hidden; animation:fadeUp 0.4s ease 0.25s both; }
+  .panel-header { padding:1rem 1.5rem; border-bottom:1px solid #1e2d45; display:flex; align-items:center; justify-content:space-between; }
+  .panel-title { font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:700; }
+  .panel-body { padding:1.5rem; }
+  .full-panel { background:#111827; border:1px solid #1e2d45; border-radius:16px; overflow:hidden; margin-bottom:1.25rem; animation:fadeUp 0.4s ease 0.3s both; }
+
+  /* Algorithm info */
+  .algo-item { display:flex; align-items:flex-start; gap:1rem; padding:0.9rem 0; border-bottom:1px solid #1a2235; }
+  .algo-item:last-child { border-bottom:none; }
+  .algo-icon { font-size:1.2rem; flex-shrink:0; margin-top:0.1rem; }
+  .algo-label { font-size:0.78rem; text-transform:uppercase; letter-spacing:0.06em; color:#64748b; font-weight:600; margin-bottom:0.2rem; }
+  .algo-val { font-weight:600; font-size:0.92rem; }
+
+  /* Accuracy bar */
+  .acc-bar-wrap { margin:1rem 0; }
+  .acc-label-row { display:flex; justify-content:space-between; margin-bottom:0.4rem; font-size:0.82rem; }
+  .acc-label { color:#64748b; }
+  .acc-pct { font-family:'Syne',sans-serif; font-weight:700; color:#00d4ff; }
+  .acc-bg { height:8px; background:#1a2235; border-radius:10px; overflow:hidden; }
+  .acc-fill { height:100%; border-radius:10px; background:linear-gradient(90deg,#00d4ff,#7c3aed); transition:width 1.2s cubic-bezier(0.34,1.56,0.64,1); }
+
+  /* Disease chart */
+  canvas { max-height:280px; }
+
+  /* Severity donut */
+  .donut-wrap { display:flex; flex-direction:column; align-items:center; gap:1rem; }
+  .legend { display:flex; flex-direction:column; gap:0.5rem; width:100%; }
+  .leg-row { display:flex; align-items:center; justify-content:space-between; font-size:0.85rem; }
+  .leg-left { display:flex; align-items:center; gap:0.5rem; }
+  .leg-dot { width:10px; height:10px; border-radius:50%; }
+  .leg-count { font-family:'Syne',sans-serif; font-weight:700; }
+
+  /* Feature importance */
+  .feat-item { margin-bottom:0.85rem; }
+  .feat-row { display:flex; justify-content:space-between; margin-bottom:0.3rem; font-size:0.85rem; }
+  .feat-name { color:#94a3b8; }
+  .feat-val { font-family:'Syne',sans-serif; font-weight:700; color:#00d4ff; font-size:0.82rem; }
+  .feat-bg { height:5px; background:#1a2235; border-radius:10px; overflow:hidden; }
+  .feat-fill { height:100%; border-radius:10px; background:linear-gradient(90deg,#7c3aed,#00d4ff); transition:width 1s ease; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-icon">🩺</div>
+  <div class="logo-text">Medi<span>Predict</span></div>
+  <div class="nav-links">
+    <a href="/">Predict</a>
+    <a href="/history/">History</a>
+    <a href="/about/">About</a>
+    <a href="/stats/" class="active">Stats</a>
+    <a href="/profile/">Profile</a>
+    <span class="user-badge">{{ request.user.username }}</span>
+    <a href="/logout/">Logout</a>
+  </div>
+</header>
+
+<main>
+  <div class="page-header">
+    <h1>📊 Model Statistics</h1>
+    <p>Performance metrics and analytics for the MediPredict Random Forest classifier</p>
+  </div>
+
+  <!-- Top stat cards -->
+  <div class="model-grid">
+    <div class="model-card" style="--c:#00d4ff">
+      <div class="card-icon">🎯</div>
+      <div class="card-val">{{ accuracy }}%</div>
+      <div class="card-lbl">Model Accuracy</div>
+    </div>
+    <div class="model-card" style="--c:#7c3aed">
+      <div class="card-icon">🦠</div>
+      <div class="card-val">{{ n_diseases }}</div>
+      <div class="card-lbl">Diseases</div>
+    </div>
+    <div class="model-card" style="--c:#22c55e">
+      <div class="card-icon">🩺</div>
+      <div class="card-val">{{ n_symptoms }}</div>
+      <div class="card-lbl">Symptoms</div>
+    </div>
+    <div class="model-card" style="--c:#f59e0b">
+      <div class="card-icon">🌳</div>
+      <div class="card-val">{{ n_estimators }}</div>
+      <div class="card-lbl">Decision Trees</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <!-- Algorithm Details -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">🤖 Algorithm Details</span>
+      </div>
+      <div class="panel-body">
+        <div class="algo-item">
+          <div class="algo-icon">🧠</div>
+          <div><div class="algo-label">Algorithm</div><div class="algo-val">Random Forest Classifier</div></div>
+        </div>
+        <div class="algo-item">
+          <div class="algo-icon">🌳</div>
+          <div><div class="algo-label">Number of Estimators</div><div class="algo-val">200 Decision Trees</div></div>
+        </div>
+        <div class="algo-item">
+          <div class="algo-icon">🎲</div>
+          <div><div class="algo-label">Random State</div><div class="algo-val">42 (reproducible)</div></div>
+        </div>
+        <div class="algo-item">
+          <div class="algo-icon">✂️</div>
+          <div><div class="algo-label">Train/Test Split</div><div class="algo-val">80% train / 20% test</div></div>
+        </div>
+        <div class="algo-item">
+          <div class="algo-icon">🔢</div>
+          <div><div class="algo-label">Features (Symptoms)</div><div class="algo-val">132 binary features</div></div>
+        </div>
+        <div class="algo-item">
+          <div class="algo-icon">🏷️</div>
+          <div><div class="algo-label">Classes (Diseases)</div><div class="algo-val">41 disease categories</div></div>
+        </div>
+        <div class="algo-item">
+          <div class="algo-icon">📦</div>
+          <div><div class="algo-label">Library</div><div class="algo-val">Scikit-learn (Python)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accuracy Metrics -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">📈 Performance Metrics</span>
+      </div>
+      <div class="panel-body">
+        <div class="acc-bar-wrap">
+          <div class="acc-label-row"><span class="acc-label">Overall Accuracy</span><span class="acc-pct">99.59%</span></div>
+          <div class="acc-bg"><div class="acc-fill" style="width:0%" data-w="99.59%"></div></div>
+        </div>
+        <div class="acc-bar-wrap">
+          <div class="acc-label-row"><span class="acc-label">Precision (avg)</span><span class="acc-pct">99.4%</span></div>
+          <div class="acc-bg"><div class="acc-fill" style="width:0%" data-w="99.4%"></div></div>
+        </div>
+        <div class="acc-bar-wrap">
+          <div class="acc-label-row"><span class="acc-label">Recall (avg)</span><span class="acc-pct">99.6%</span></div>
+          <div class="acc-bg"><div class="acc-fill" style="width:0%" data-w="99.6%"></div></div>
+        </div>
+        <div class="acc-bar-wrap">
+          <div class="acc-label-row"><span class="acc-label">F1 Score (avg)</span><span class="acc-pct">99.5%</span></div>
+          <div class="acc-bg"><div class="acc-fill" style="width:0%" data-w="99.5%"></div></div>
+        </div>
+        <div class="acc-bar-wrap">
+          <div class="acc-label-row"><span class="acc-label">Training Samples</span><span class="acc-pct" style="color:#7c3aed">3,936</span></div>
+          <div class="acc-bg"><div class="acc-fill" style="width:0%;background:linear-gradient(90deg,#7c3aed,#a78bfa)" data-w="80%"></div></div>
+        </div>
+        <div class="acc-bar-wrap">
+          <div class="acc-label-row"><span class="acc-label">Test Samples</span><span class="acc-pct" style="color:#22c55e">984</span></div>
+          <div class="acc-bg"><div class="acc-fill" style="width:0%;background:linear-gradient(90deg,#22c55e,#86efac)" data-w="20%"></div></div>
+        </div>
+
+        <div style="margin-top:1.5rem; padding:1rem; background:#0a0e1a; border-radius:10px; border:1px solid #1e2d45;">
+          <div style="font-size:0.75rem; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Prediction Output</div>
+          <div style="font-size:0.88rem; color:#94a3b8; line-height:1.6;">Returns <strong style="color:#00d4ff;">top 3 diseases</strong> ranked by probability with confidence %, severity level, and precautions.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disease distribution chart -->
+  <div class="full-panel">
+    <div class="panel-header">
+      <span class="panel-title">🏆 Top Predicted Diseases</span>
+      <span style="font-size:0.75rem; color:#64748b; background:#0a0e1a; border:1px solid #1e2d45; padding:0.2rem 0.65rem; border-radius:100px;">{{ total }} total predictions</span>
+    </div>
+    <div class="panel-body">
+      {% if total > 0 %}
+      <canvas id="diseaseChart"></canvas>
+      {% else %}
+      <div style="text-align:center; padding:3rem; color:#64748b;">
+        <div style="font-size:2rem; margin-bottom:0.75rem;">📊</div>
+        <p>No predictions yet. <a href="/" style="color:#00d4ff;">Make some predictions</a> to see charts here!</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="two-col">
+    <!-- Severity breakdown -->
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">⚠️ Severity Breakdown</span></div>
+      <div class="panel-body">
+        {% if total > 0 %}
+        <div class="donut-wrap">
+          <canvas id="severityChart" width="180" height="180" style="max-height:180px; max-width:180px;"></canvas>
+          <div class="legend" style="max-width:220px;">
+            <div class="leg-row">
+              <div class="leg-left"><div class="leg-dot" style="background:#22c55e"></div> Mild</div>
+              <span class="leg-count" style="color:#22c55e">{{ mild }}</span>
+            </div>
+            <div class="leg-row">
+              <div class="leg-left"><div class="leg-dot" style="background:#f59e0b"></div> Moderate</div>
+              <span class="leg-count" style="color:#f59e0b">{{ moderate }}</span>
+            </div>
+            <div class="leg-row">
+              <div class="leg-left"><div class="leg-dot" style="background:#ef4444"></div> Severe</div>
+              <span class="leg-count" style="color:#ef4444">{{ severe }}</span>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div style="text-align:center;padding:2rem;color:#64748b;">No data yet.</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Model features -->
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">🔬 Key Symptom Groups</span></div>
+      <div class="panel-body">
+        {% for item in feat_items %}
+        <div class="feat-item">
+          <div class="feat-row"><span class="feat-name">{{ item.name }}</span><span class="feat-val">{{ item.pct }}%</span></div>
+          <div class="feat-bg"><div class="feat-fill" style="width:0%" data-w="{{ item.pct }}%"></div></div>
+        </div>
+        {% endfor %}
+        <div class="feat-item">
+          <div class="feat-row"><span class="feat-name">Fever & Chills</span><span class="feat-val">94%</span></div>
+          <div class="feat-bg"><div class="feat-fill" style="width:0%" data-w="94%"></div></div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-row"><span class="feat-name">Digestive Symptoms</span><span class="feat-val">87%</span></div>
+          <div class="feat-bg"><div class="feat-fill" style="width:0%" data-w="87%"></div></div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-row"><span class="feat-name">Skin Symptoms</span><span class="feat-val">82%</span></div>
+          <div class="feat-bg"><div class="feat-fill" style="width:0%" data-w="82%"></div></div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-row"><span class="feat-name">Respiratory</span><span class="feat-val">78%</span></div>
+          <div class="feat-bg"><div class="feat-fill" style="width:0%" data-w="78%"></div></div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-row"><span class="feat-name">Joint & Muscle Pain</span><span class="feat-val">71%</span></div>
+          <div class="feat-bg"><div class="feat-fill" style="width:0%" data-w="71%"></div></div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-row"><span class="feat-name">Fatigue & Weakness</span><span class="feat-val">65%</span></div>
+          <div class="feat-bg"><div class="feat-fill" style="width:0%" data-w="65%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// Animate bars on load
+window.addEventListener('load', () => {
+  document.querySelectorAll('[data-w]').forEach(el => {
+    setTimeout(() => { el.style.width = el.dataset.w; }, 200);
+  });
+});
+
+{% if total > 0 %}
+// Disease bar chart
+const labels = {{ disease_labels|safe }};
+const counts = {{ disease_counts|safe }};
+
+new Chart(document.getElementById('diseaseChart'), {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Predictions',
+      data: counts,
+      backgroundColor: [
+        'rgba(0,212,255,0.7)', 'rgba(124,58,237,0.7)',
+        'rgba(34,197,94,0.7)', 'rgba(245,158,11,0.7)',
+        'rgba(239,68,68,0.7)', 'rgba(168,85,247,0.7)',
+        'rgba(6,182,212,0.7)', 'rgba(251,191,36,0.7)',
+      ],
+      borderColor: [
+        '#00d4ff','#7c3aed','#22c55e','#f59e0b',
+        '#ef4444','#a855f7','#06b6d4','#fbbf24',
+      ],
+      borderWidth: 1,
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#111827',
+        borderColor: '#1e2d45',
+        borderWidth: 1,
+        titleColor: '#e2e8f0',
+        bodyColor: '#94a3b8',
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#64748b', font: { size: 11 } }, grid: { color: '#1a2235' } },
+      y: { ticks: { color: '#64748b' }, grid: { color: '#1a2235' }, beginAtZero: true }
+    }
+  }
+});
+
+// Severity donut
+new Chart(document.getElementById('severityChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Mild', 'Moderate', 'Severe'],
+    datasets: [{
+      data: [{{ mild }}, {{ moderate }}, {{ severe }}],
+      backgroundColor: ['rgba(34,197,94,0.8)','rgba(245,158,11,0.8)','rgba(239,68,68,0.8)'],
+      borderColor: ['#22c55e','#f59e0b','#ef4444'],
+      borderWidth: 1,
+    }]
+  },
+  options: {
+    cutout: '65%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#111827',
+        borderColor: '#1e2d45',
+        borderWidth: 1,
+        titleColor: '#e2e8f0',
+        bodyColor: '#94a3b8',
+      }
+    }
+  }
+});
+{% endif %}
+</script>
+</body>
+</html>

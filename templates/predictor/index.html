@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediPredict — Disease Prediction System</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --card: #131c2e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,212,255,0.08) 0%, transparent 60%);
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.2rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    backdrop-filter: blur(10px);
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,26,0.85);
+  }
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+  }
+  .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; }
+  .logo-text span { color: var(--accent); }
+  .badge {
+    margin-left: auto;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.25);
+    color: var(--accent);
+    font-size: 0.7rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Layout ── */
+  main { max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+  .hero { text-align: center; margin-bottom: 3rem; }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  .hero h1 span {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p { color: var(--muted); font-size: 1.05rem; max-width: 480px; margin: 0 auto; }
+
+  /* ── Search Box ── */
+  .search-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .search-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+  .search-input-row { position: relative; }
+  #symptom-input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.85rem 1.1rem;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  #symptom-input:focus { border-color: var(--accent); }
+  #symptom-input::placeholder { color: var(--muted); }
+
+  /* Dropdown */
+  #dropdown {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 50;
+    display: none;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  }
+  #dropdown.open { display: block; }
+  .dd-item {
+    padding: 0.7rem 1.1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.15s;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .dd-item:hover { background: rgba(0,212,255,0.08); color: var(--accent); }
+  .dd-item .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: 0.5; }
+
+  /* Tags */
+  .tags-label {
+    font-size: 0.78rem; color: var(--muted);
+    margin: 1rem 0 0.5rem;
+    font-weight: 500;
+  }
+  #tags-container {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    min-height: 36px;
+  }
+  .tag {
+    background: rgba(0,212,255,0.12);
+    border: 1px solid rgba(0,212,255,0.3);
+    color: var(--accent);
+    padding: 0.35rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    display: flex; align-items: center; gap: 0.4rem;
+    animation: tagIn 0.2s ease;
+  }
+  @keyframes tagIn { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
+  .tag-remove {
+    cursor: pointer; opacity: 0.6;
+    font-size: 1rem; line-height: 1;
+    transition: opacity 0.15s;
+  }
+  .tag-remove:hover { opacity: 1; }
+
+  /* ── Predict Button ── */
+  #predict-btn {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  #predict-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  #predict-btn:active { transform: translateY(0); }
+  #predict-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  #predict-btn .btn-inner { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Error ── */
+  #error-msg {
+    display: none;
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: #fca5a5;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.88rem;
+    margin-top: 1rem;
+  }
+
+  /* ── Results ── */
+  #results-section {
+    display: none;
+    animation: fadeUp 0.4s ease;
+  }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+  .results-header {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .results-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem; font-weight: 700;
+  }
+  .results-count {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .result-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent-color, var(--accent));
+    border-radius: 3px 0 0 3px;
+  }
+  .result-card:hover { border-color: rgba(0,212,255,0.3); }
+
+  .card-top {
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .card-rank {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .card-disease {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.25rem; font-weight: 700;
+  }
+  .card-right { text-align: right; flex-shrink: 0; }
+  .confidence-big {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800;
+    line-height: 1;
+  }
+  .confidence-label { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+
+  .severity-badge {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+    font-size: 0.78rem; font-weight: 600;
+    margin-top: 0.4rem;
+  }
+  .severity-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+  /* Confidence bar */
+  .conf-bar-wrap { margin: 1rem 0; }
+  .conf-bar-bg {
+    height: 6px; background: var(--surface2);
+    border-radius: 10px; overflow: hidden;
+  }
+  .conf-bar-fill {
+    height: 100%; border-radius: 10px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Precautions */
+  .precautions-title {
+    font-size: 0.78rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 0.6rem;
+  }
+  .precautions-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+  .prec-item {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.83rem;
+    display: flex; align-items: center; gap: 0.5rem;
+    color: #94a3b8;
+  }
+  .prec-icon { font-size: 0.9rem; }
+
+  /* ── Disclaimer ── */
+  .disclaimer {
+    margin-top: 2rem;
+    background: rgba(245,158,11,0.07);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    font-size: 0.83rem;
+    color: #fbbf24;
+    display: flex; gap: 0.75rem; align-items: flex-start;
+  }
+  .disclaimer-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center; padding: 2rem;
+    color: var(--muted); font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+    margin-top: 4rem;
+  }
+  footer strong { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">🩺</div>
+  <div class="logo-text">Medi<span>Predict</span></div>
+  <div style="margin-left:auto; display:flex; gap:1rem; align-items:center;">
+    <a href="/history/" style="color:#64748b; text-decoration:none; font-size:0.88rem;">History</a>
+    <div class="badge">{{ request.user.username }}</div>
+    <a href="/logout/" style="color:#64748b; text-decoration:none; font-size:0.88rem;">Logout</a>
+    <a href="/chatbot/">Chatbot</a>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>AI-Powered<br><span>Disease Prediction</span></h1>
+    <p>Select your symptoms and our Random Forest model predicts possible conditions with confidence scores.</p>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-label">Step 1 — Select Symptoms</div>
+    <div class="search-input-row">
+      <input type="text" id="symptom-input" placeholder="Type a symptom (e.g. headache, fever, cough)…" autocomplete="off">
+      <div id="dropdown"></div>
+    </div>
+    <div class="tags-label" id="tags-label">Selected symptoms will appear here</div>
+    <div id="tags-container"></div>
+
+    <button id="predict-btn" disabled>
+      <div class="btn-inner">
+        <div class="spinner" id="spinner"></div>
+        <span id="btn-text">⚡ Predict Disease</span>
+      </div>
+    </button>
+    <div id="error-msg"></div>
+  </div>
+
+  <div id="results-section">
+    <div class="results-header">
+      <h2>Prediction Results</h2>
+      <div class="results-count" id="results-count"></div>
+    </div>
+    <div id="results-container"></div>
+    <div class="disclaimer">
+      <div class="disclaimer-icon">⚠️</div>
+      <div>This tool is for <strong>educational purposes only</strong>. It is not a substitute for professional medical advice. Always consult a qualified healthcare provider for diagnosis and treatment.</div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  MediPredict — Disease Prediction System &nbsp;|&nbsp; Built with <strong>Django + Random Forest</strong> &nbsp;|&nbsp; TU BCA Final Year Project 2021 Batch
+</footer>
+
+<script>
+const SYMPTOMS = {{ symptoms | safe }};
+let selected = [];
+
+const input = document.getElementById('symptom-input');
+const dropdown = document.getElementById('dropdown');
+const tagsContainer = document.getElementById('tags-container');
+const tagsLabel = document.getElementById('tags-label');
+const predictBtn = document.getElementById('predict-btn');
+const spinner = document.getElementById('spinner');
+const btnText = document.getElementById('btn-text');
+const errorMsg = document.getElementById('error-msg');
+
+function updateTagsLabel() {
+  tagsLabel.textContent = selected.length === 0
+    ? 'Selected symptoms will appear here'
+    : `${selected.length} symptom${selected.length > 1 ? 's' : ''} selected (minimum 3 required)`;
+}
+
+function renderTags() {
+  tagsContainer.innerHTML = '';
+  selected.forEach(s => {
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.innerHTML = `${s} <span class="tag-remove" data-s="${s}">×</span>`;
+    tagsContainer.appendChild(tag);
+  });
+  updateTagsLabel();
+  predictBtn.disabled = selected.length < 3;
+}
+
+function renderDropdown(query) {
+  const q = query.toLowerCase();
+  const matches = SYMPTOMS.filter(s => s.toLowerCase().includes(q) && !selected.includes(s)).slice(0, 8);
+  if (!matches.length || !q) { dropdown.classList.remove('open'); return; }
+  dropdown.innerHTML = matches.map(s =>
+    `<div class="dd-item" data-s="${s}"><span class="dot"></span>${s}</div>`
+  ).join('');
+  dropdown.classList.add('open');
+}
+
+input.addEventListener('input', () => renderDropdown(input.value));
+
+dropdown.addEventListener('click', e => {
+  const item = e.target.closest('.dd-item');
+  if (!item) return;
+  const s = item.dataset.s;
+  if (!selected.includes(s)) { selected.push(s); renderTags(); }
+  input.value = '';
+  dropdown.classList.remove('open');
+  input.focus();
+});
+
+tagsContainer.addEventListener('click', e => {
+  const rm = e.target.closest('.tag-remove');
+  if (!rm) return;
+  selected = selected.filter(s => s !== rm.dataset.s);
+  renderTags();
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-input-row')) dropdown.classList.remove('open');
+});
+
+// ── Predict ───────────────────────────────────────────────────────────────────
+predictBtn.addEventListener('click', async () => {
+  errorMsg.style.display = 'none';
+  spinner.style.display = 'block';
+  btnText.textContent = 'Analyzing…';
+  predictBtn.disabled = true;
+
+  try {
+    const res = await fetch('/predict/', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({symptoms: selected})
+    });
+    const data = await res.json();
+
+    if (data.error) { showError(data.error); return; }
+    renderResults(data.predictions);
+  } catch (e) {
+    showError('Connection error. Make sure the Django server is running.');
+  } finally {
+    spinner.style.display = 'none';
+    btnText.textContent = '⚡ Predict Disease';
+    predictBtn.disabled = selected.length < 3;
+  }
+});
+
+function showError(msg) {
+  errorMsg.textContent = msg;
+  errorMsg.style.display = 'block';
+}
+
+const SEVERITY_COLORS = { Mild: '#22c55e', Moderate: '#f59e0b', Severe: '#ef4444' };
+const PREC_ICONS = ['💊','🥗','🛌','🩺'];
+const RANK_LABELS = ['Primary Match', 'Secondary Match', 'Third Possibility'];
+
+function renderResults(predictions) {
+  const section = document.getElementById('results-section');
+  const container = document.getElementById('results-container');
+  document.getElementById('results-count').textContent = `${predictions.length} conditions found`;
+
+  container.innerHTML = '';
+  predictions.forEach((p, i) => {
+    const color = SEVERITY_COLORS[p.severity] || '#94a3b8';
+    const card = document.createElement('div');
+    card.className = 'result-card';
+    card.style.setProperty('--accent-color', color);
+    card.innerHTML = `
+      <div class="card-top">
+        <div>
+          <div class="card-rank">${RANK_LABELS[i]}</div>
+          <div class="card-disease">${p.disease}</div>
+          <div class="severity-badge" style="background:${color}22; color:${color}; border: 1px solid ${color}44">
+            <span class="severity-dot" style="background:${color}"></span>
+            ${p.severity} Severity
+          </div>
+        </div>
+        <div class="card-right">
+          <div class="confidence-big" style="color:${color}">${p.confidence}%</div>
+          <div class="confidence-label">Confidence</div>
+        </div>
+      </div>
+      <div class="conf-bar-wrap">
+        <div class="conf-bar-bg">
+          <div class="conf-bar-fill" style="width:0%" data-width="${p.confidence}%"></div>
+        </div>
+      </div>
+      <div class="precautions-title">Recommended Precautions</div>
+      <div class="precautions-grid">
+        ${p.precautions.map((pr, j) => `
+          <div class="prec-item">
+            <span class="prec-icon">${PREC_ICONS[j] || '✅'}</span> ${pr}
+          </div>`).join('')}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  section.style.display = 'block';
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Animate bars after paint
+  setTimeout(() => {
+    document.querySelectorAll('.conf-bar-fill').forEach(bar => {
+      bar.style.width = bar.dataset.width;
+    });
+  }, 100);
+}
+</script>
+</body>
+</html>
