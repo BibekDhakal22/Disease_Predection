@@ -4,397 +4,221 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MediPredict — Disease Prediction System</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0e1a;
-    --surface: #111827;
-    --surface2: #1a2235;
-    --border: #1e2d45;
-    --accent: #00d4ff;
-    --accent2: #7c3aed;
-    --green: #22c55e;
-    --amber: #f59e0b;
-    --red: #ef4444;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --card: #131c2e;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,212,255,0.08) 0%, transparent 60%);
-  }
+:root {
+  --nav: #1e293b;
+  --nav-border: #334155;
+  --bg: #f8fafc;
+  --white: #ffffff;
+  --border: #e2e8f0;
+  --border2: #f1f5f9;
+  --blue: #2563eb;
+  --blue-light: #eff6ff;
+  --blue-mid: #bfdbfe;
+  --blue-dark: #1d4ed8;
+  --text: #0f172a;
+  --text2: #475569;
+  --muted: #94a3b8;
+  --green: #059669;
+  --amber: #d97706;
+  --red: #dc2626;
+  --purple: #7c3aed;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
 
-  /* ── Header ── */
-  header {
-    border-bottom: 1px solid var(--border);
-    padding: 1.2rem 2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    backdrop-filter: blur(10px);
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(10,14,26,0.85);
-  }
-  .logo-icon {
-    width: 38px; height: 38px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem;
-  }
-  .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; }
-  .logo-text span { color: var(--accent); }
-  .badge {
-    margin-left: auto;
-    background: rgba(0,212,255,0.1);
-    border: 1px solid rgba(0,212,255,0.25);
-    color: var(--accent);
-    font-size: 0.7rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 100px;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-  }
+/* Nav */
+nav { background:var(--nav); padding:0 2rem; height:60px; display:flex; align-items:center; gap:1rem; position:sticky; top:0; z-index:100; box-shadow:0 1px 0 var(--nav-border); }
+.logo { display:flex; align-items:center; gap:0.6rem; text-decoration:none; }
+.logo-icon { width:34px; height:34px; background:var(--blue); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px; }
+.logo-text { font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem; color:white; }
+.logo-text span { color:#60a5fa; }
+.nav-links { margin-left:auto; display:flex; align-items:center; gap:1.5rem; }
+.nav-links a { color:#94a3b8; text-decoration:none; font-size:0.85rem; font-weight:500; transition:color 0.15s; }
+.nav-links a:hover, .nav-links a.active { color:white; }
+.nav-badge { background:#1d4ed8; color:#bfdbfe; font-size:0.72rem; font-weight:600; padding:0.25rem 0.75rem; border-radius:100px; }
 
-  /* ── Layout ── */
-  main { max-width: 1000px; margin: 0 auto; padding: 3rem 1.5rem; }
+/* Layout */
+main { max-width:1000px; margin:0 auto; padding:2.5rem 1.5rem; }
 
-  .hero { text-align: center; margin-bottom: 3rem; }
-  .hero h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 1rem;
-  }
-  .hero h1 span {
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .hero p { color: var(--muted); font-size: 1.05rem; max-width: 480px; margin: 0 auto; }
+/* Hero */
+.hero { text-align:center; margin-bottom:2.5rem; }
+.hero-badge { display:inline-flex; align-items:center; gap:0.4rem; background:var(--blue-light); border:1px solid var(--blue-mid); color:var(--blue); font-size:0.72rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; padding:0.35rem 1rem; border-radius:100px; margin-bottom:1rem; }
+.hero h1 { font-family:'Syne',sans-serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:800; color:var(--text); line-height:1.15; margin-bottom:0.75rem; }
+.hero h1 span { color:var(--blue); }
+.hero p { color:var(--text2); font-size:1rem; max-width:480px; margin:0 auto; line-height:1.6; }
 
-  /* ── Search Box ── */
-  .search-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.75rem;
-    margin-bottom: 1.5rem;
-  }
-  .search-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.75rem;
-  }
-  .search-input-row { position: relative; }
-  #symptom-input {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.85rem 1.1rem;
-    color: var(--text);
-    font-size: 0.95rem;
-    font-family: 'DM Sans', sans-serif;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  #symptom-input:focus { border-color: var(--accent); }
-  #symptom-input::placeholder { color: var(--muted); }
+/* Stats strip */
+.stats-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem; }
+.stat-card { background:var(--white); border:1px solid var(--border); border-top:3px solid var(--c); border-radius:var(--radius); padding:1.1rem 1.25rem; box-shadow:var(--shadow); }
+.stat-val { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; color:var(--c); line-height:1; margin-bottom:0.2rem; }
+.stat-lbl { font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; font-weight:600; }
 
-  /* Dropdown */
-  #dropdown {
-    position: absolute; top: calc(100% + 6px); left: 0; right: 0;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    max-height: 220px;
-    overflow-y: auto;
-    z-index: 50;
-    display: none;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-  }
-  #dropdown.open { display: block; }
-  .dd-item {
-    padding: 0.7rem 1.1rem;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background 0.15s;
-    display: flex; align-items: center; gap: 0.5rem;
-  }
-  .dd-item:hover { background: rgba(0,212,255,0.08); color: var(--accent); }
-  .dd-item .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: 0.5; }
+/* Main card grid */
+.card-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+.card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); }
+.card-head { padding:1rem 1.25rem; border-bottom:1px solid var(--border2); display:flex; align-items:center; justify-content:space-between; }
+.card-title { font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:700; color:var(--text); letter-spacing:0.03em; }
+.card-badge { font-size:0.72rem; color:var(--muted); background:var(--bg); border:1px solid var(--border); padding:0.18rem 0.6rem; border-radius:100px; }
+.card-body { padding:1.25rem; }
 
-  /* Tags */
-  .tags-label {
-    font-size: 0.78rem; color: var(--muted);
-    margin: 1rem 0 0.5rem;
-    font-weight: 500;
-  }
-  #tags-container {
-    display: flex; flex-wrap: wrap; gap: 0.5rem;
-    min-height: 36px;
-  }
-  .tag {
-    background: rgba(0,212,255,0.12);
-    border: 1px solid rgba(0,212,255,0.3);
-    color: var(--accent);
-    padding: 0.35rem 0.75rem;
-    border-radius: 100px;
-    font-size: 0.82rem;
-    display: flex; align-items: center; gap: 0.4rem;
-    animation: tagIn 0.2s ease;
-  }
-  @keyframes tagIn { from { opacity:0; transform:scale(0.8); } to { opacity:1; transform:scale(1); } }
-  .tag-remove {
-    cursor: pointer; opacity: 0.6;
-    font-size: 1rem; line-height: 1;
-    transition: opacity 0.15s;
-  }
-  .tag-remove:hover { opacity: 1; }
+/* Symptom input */
+.search-wrap { position:relative; margin-bottom:1rem; }
+#symptom-input { width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:0.8rem 1rem; color:var(--text); font-size:0.9rem; font-family:'DM Sans',sans-serif; outline:none; transition:border-color 0.15s; }
+#symptom-input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(37,99,235,0.1); }
+#symptom-input::placeholder { color:var(--muted); }
+#dropdown { position:absolute; top:calc(100% + 6px); left:0; right:0; background:var(--white); border:1px solid var(--border); border-radius:10px; max-height:220px; overflow-y:auto; z-index:50; display:none; box-shadow:0 8px 24px rgba(0,0,0,0.1); }
+#dropdown.open { display:block; }
+.dd-item { padding:0.65rem 1rem; cursor:pointer; font-size:0.88rem; color:var(--text2); transition:background 0.1s; display:flex; align-items:center; gap:0.5rem; border-bottom:1px solid var(--border2); }
+.dd-item:last-child { border-bottom:none; }
+.dd-item:hover { background:var(--blue-light); color:var(--blue); }
+.dd-dot { width:6px; height:6px; border-radius:50%; background:var(--blue); opacity:0.4; flex-shrink:0; }
 
-  /* ── Predict Button ── */
-  #predict-btn {
-    width: 100%;
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border: none;
-    border-radius: 12px;
-    color: white;
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.15s;
-    position: relative;
-    overflow: hidden;
-  }
-  #predict-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-  #predict-btn:active { transform: translateY(0); }
-  #predict-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-  #predict-btn .btn-inner { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+/* Tags */
+.tags-label { font-size:0.75rem; color:var(--muted); font-weight:500; margin-bottom:0.5rem; }
+#tags-container { display:flex; flex-wrap:wrap; gap:0.4rem; min-height:32px; }
+.tag { background:var(--blue-light); border:1px solid var(--blue-mid); color:var(--blue); padding:0.28rem 0.7rem; border-radius:100px; font-size:0.78rem; font-weight:600; display:flex; align-items:center; gap:0.3rem; animation:tagIn 0.2s ease; }
+@keyframes tagIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
+.tag-remove { cursor:pointer; opacity:0.55; font-size:0.95rem; line-height:1; transition:opacity 0.15s; }
+.tag-remove:hover { opacity:1; }
 
-  .spinner {
-    width: 18px; height: 18px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    display: none;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+/* Predict button */
+#predict-btn { width:100%; margin-top:1.25rem; padding:0.85rem; background:var(--blue); border:none; border-radius:10px; color:white; font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:700; cursor:pointer; transition:background 0.15s, transform 0.1s; display:flex; align-items:center; justify-content:center; gap:0.5rem; }
+#predict-btn:hover { background:var(--blue-dark); }
+#predict-btn:active { transform:scale(0.99); }
+#predict-btn:disabled { background:#cbd5e1; cursor:not-allowed; transform:none; }
+.spinner { width:16px; height:16px; border:2px solid rgba(255,255,255,0.35); border-top-color:white; border-radius:50%; animation:spin 0.7s linear infinite; display:none; }
+@keyframes spin { to{transform:rotate(360deg)} }
 
-  /* ── Error ── */
-  #error-msg {
-    display: none;
-    background: rgba(239,68,68,0.1);
-    border: 1px solid rgba(239,68,68,0.3);
-    color: #fca5a5;
-    border-radius: 10px;
-    padding: 0.75rem 1rem;
-    font-size: 0.88rem;
-    margin-top: 1rem;
-  }
+/* Error */
+#error-msg { display:none; background:#fef2f2; border:1px solid #fecaca; color:#991b1b; border-radius:8px; padding:0.65rem 0.9rem; font-size:0.85rem; margin-top:0.75rem; }
 
-  /* ── Results ── */
-  #results-section {
-    display: none;
-    animation: fadeUp 0.4s ease;
-  }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+/* Results */
+#results-section { display:none; animation:fadeUp 0.35s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+.results-header { display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; }
+.results-header h2 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; }
 
-  .results-header {
-    display: flex; align-items: center; gap: 0.75rem;
-    margin-bottom: 1.25rem;
-  }
-  .results-header h2 {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.1rem; font-weight: 700;
-  }
-  .results-count {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    padding: 0.2rem 0.65rem;
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
+.result-card { background:var(--white); border:1px solid var(--border); border-left:4px solid var(--rc); border-radius:var(--radius); padding:1.25rem; margin-bottom:0.85rem; box-shadow:var(--shadow); transition:box-shadow 0.2s; }
+.result-card:hover { box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+.card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:0.85rem; }
+.card-rank { font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:0.2rem; }
+.card-disease { font-family:'Syne',sans-serif; font-size:1.15rem; font-weight:700; color:var(--text); }
+.card-right { text-align:right; flex-shrink:0; }
+.conf-big { font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; color:var(--rc); line-height:1; }
+.conf-lbl { font-size:0.7rem; color:var(--muted); margin-top:0.15rem; }
+.sev-badge { display:inline-flex; align-items:center; gap:0.3rem; padding:0.25rem 0.7rem; border-radius:100px; font-size:0.75rem; font-weight:600; margin-top:0.3rem; }
+.sev-dot { width:6px; height:6px; border-radius:50%; }
+.conf-bar-wrap { margin:0.75rem 0; }
+.conf-bar-bg { height:5px; background:var(--border2); border-radius:10px; overflow:hidden; }
+.conf-bar-fill { height:100%; border-radius:10px; background:var(--rc); transition:width 0.9s cubic-bezier(0.34,1.56,0.64,1); }
+.prec-title { font-size:0.72rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem; }
+.prec-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.35rem; }
+.prec-item { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:0.45rem 0.7rem; font-size:0.8rem; color:var(--text2); display:flex; align-items:center; gap:0.4rem; }
 
-  .result-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    transition: border-color 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .result-card::before {
-    content: '';
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: var(--accent-color, var(--accent));
-    border-radius: 3px 0 0 3px;
-  }
-  .result-card:hover { border-color: rgba(0,212,255,0.3); }
+/* Disclaimer */
+.disclaimer { margin-top:1.75rem; background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:0.9rem 1.1rem; font-size:0.82rem; color:#92400e; display:flex; gap:0.6rem; align-items:flex-start; }
 
-  .card-top {
-    display: flex; align-items: flex-start;
-    justify-content: space-between; gap: 1rem;
-    margin-bottom: 1rem;
-  }
-  .card-rank {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.7rem; font-weight: 700;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 0.3rem;
-  }
-  .card-disease {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.25rem; font-weight: 700;
-  }
-  .card-right { text-align: right; flex-shrink: 0; }
-  .confidence-big {
-    font-family: 'Syne', sans-serif;
-    font-size: 2rem; font-weight: 800;
-    line-height: 1;
-  }
-  .confidence-label { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
-
-  .severity-badge {
-    display: inline-flex; align-items: center; gap: 0.35rem;
-    padding: 0.3rem 0.8rem;
-    border-radius: 100px;
-    font-size: 0.78rem; font-weight: 600;
-    margin-top: 0.4rem;
-  }
-  .severity-dot { width: 7px; height: 7px; border-radius: 50%; }
-
-  /* Confidence bar */
-  .conf-bar-wrap { margin: 1rem 0; }
-  .conf-bar-bg {
-    height: 6px; background: var(--surface2);
-    border-radius: 10px; overflow: hidden;
-  }
-  .conf-bar-fill {
-    height: 100%; border-radius: 10px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  /* Precautions */
-  .precautions-title {
-    font-size: 0.78rem; font-weight: 600;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 0.6rem;
-  }
-  .precautions-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 0.4rem;
-  }
-  .prec-item {
-    background: var(--surface2);
-    border-radius: 8px;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.83rem;
-    display: flex; align-items: center; gap: 0.5rem;
-    color: #94a3b8;
-  }
-  .prec-icon { font-size: 0.9rem; }
-
-  /* ── Disclaimer ── */
-  .disclaimer {
-    margin-top: 2rem;
-    background: rgba(245,158,11,0.07);
-    border: 1px solid rgba(245,158,11,0.2);
-    border-radius: 12px;
-    padding: 1rem 1.25rem;
-    font-size: 0.83rem;
-    color: #fbbf24;
-    display: flex; gap: 0.75rem; align-items: flex-start;
-  }
-  .disclaimer-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
-
-  /* ── Footer ── */
-  footer {
-    text-align: center; padding: 2rem;
-    color: var(--muted); font-size: 0.8rem;
-    border-top: 1px solid var(--border);
-    margin-top: 4rem;
-  }
-  footer strong { color: var(--accent); }
+footer { text-align:center; padding:2rem; color:var(--muted); font-size:0.78rem; border-top:1px solid var(--border); margin-top:3rem; }
+footer strong { color:var(--blue); }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo-icon">🩺</div>
-  <div class="logo-text">Medi<span>Predict</span></div>
-  <div style="margin-left:auto; display:flex; gap:1rem; align-items:center;">
-    <a href="/history/" style="color:#64748b; text-decoration:none; font-size:0.88rem;">History</a>
-    <div class="badge">{{ request.user.username }}</div>
-    <a href="/logout/" style="color:#64748b; text-decoration:none; font-size:0.88rem;">Logout</a>
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon">🩺</div>
+    <div class="logo-text">Medi<span>Predict</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/" class="active">Predict</a>
+    <a href="/history/">History</a>
     <a href="/chatbot/">Chatbot</a>
+    <a href="/about/">About</a>
+    <a href="/stats/">Stats</a>
+    <a href="/profile/">Profile</a>
+    {% if user.is_staff %}<a href="/dashboard/">Dashboard</a>{% endif %}
+    <span class="nav-badge">{{ request.user.username }}</span>
+    <a href="/logout/">Logout</a>
   </div>
-</header>
+</nav>
 
 <main>
   <div class="hero">
-    <h1>AI-Powered<br><span>Disease Prediction</span></h1>
+    <div class="hero-badge">🎓 TU BCA Final Year Project — 2021 Batch</div>
+    <h1>AI-Powered <span>Disease Prediction</span></h1>
     <p>Select your symptoms and our Random Forest model predicts possible conditions with confidence scores.</p>
   </div>
 
-  <div class="search-wrap">
-    <div class="search-label">Step 1 — Select Symptoms</div>
-    <div class="search-input-row">
-      <input type="text" id="symptom-input" placeholder="Type a symptom (e.g. headache, fever, cough)…" autocomplete="off">
-      <div id="dropdown"></div>
-    </div>
-    <div class="tags-label" id="tags-label">Selected symptoms will appear here</div>
-    <div id="tags-container"></div>
-
-    <button id="predict-btn" disabled>
-      <div class="btn-inner">
-        <div class="spinner" id="spinner"></div>
-        <span id="btn-text">⚡ Predict Disease</span>
-      </div>
-    </button>
-    <div id="error-msg"></div>
+  <div class="stats-strip">
+    <div class="stat-card" style="--c:#2563eb"><div class="stat-val">99.6%</div><div class="stat-lbl">Accuracy</div></div>
+    <div class="stat-card" style="--c:#7c3aed"><div class="stat-val">41</div><div class="stat-lbl">Diseases</div></div>
+    <div class="stat-card" style="--c:#059669"><div class="stat-val">132</div><div class="stat-lbl">Symptoms</div></div>
+    <div class="stat-card" style="--c:#d97706"><div class="stat-val">200</div><div class="stat-lbl">Decision Trees</div></div>
   </div>
 
-  <div id="results-section">
-    <div class="results-header">
-      <h2>Prediction Results</h2>
-      <div class="results-count" id="results-count"></div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">Step 1 — Select Symptoms</span>
+        <span class="card-badge" id="count-badge">0 selected</span>
+      </div>
+      <div class="card-body">
+        <div class="search-wrap">
+          <input type="text" id="symptom-input" placeholder="Type a symptom (e.g. headache, fever, cough)…" autocomplete="off">
+          <div id="dropdown"></div>
+        </div>
+        <div class="tags-label" id="tags-label">Selected symptoms appear here</div>
+        <div id="tags-container"></div>
+        <button id="predict-btn" disabled>
+          <div class="spinner" id="spinner"></div>
+          <span id="btn-text">⚡ Predict Disease</span>
+        </button>
+        <div id="error-msg"></div>
+      </div>
     </div>
-    <div id="results-container"></div>
-    <div class="disclaimer">
-      <div class="disclaimer-icon">⚠️</div>
-      <div>This tool is for <strong>educational purposes only</strong>. It is not a substitute for professional medical advice. Always consult a qualified healthcare provider for diagnosis and treatment.</div>
+
+    <div id="results-section">
+      <div class="results-header">
+        <h2>Prediction Results</h2>
+        <span class="card-badge" id="results-count"></span>
+      </div>
+      <div id="results-container"></div>
+      <div class="disclaimer">
+        <span>⚠️</span>
+        <span>This tool is for <strong>educational purposes only</strong> and is NOT a substitute for professional medical advice. Always consult a qualified healthcare provider.</span>
+      </div>
+    </div>
+
+    <div class="card" id="empty-right">
+      <div class="card-head"><span class="card-title">How It Works</span></div>
+      <div class="card-body">
+        <div style="display:flex;flex-direction:column;gap:1rem;padding:0.5rem 0;">
+          <div style="display:flex;gap:1rem;align-items:flex-start;">
+            <div style="width:32px;height:32px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🔍</div>
+            <div><div style="font-weight:600;font-size:0.88rem;margin-bottom:0.2rem;color:#0f172a;">Select Symptoms</div><div style="font-size:0.82rem;color:#64748b;line-height:1.5;">Search and select from 132 medically recognized symptoms.</div></div>
+          </div>
+          <div style="display:flex;gap:1rem;align-items:flex-start;">
+            <div style="width:32px;height:32px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🤖</div>
+            <div><div style="font-weight:600;font-size:0.88rem;margin-bottom:0.2rem;color:#0f172a;">AI Analysis</div><div style="font-size:0.82rem;color:#64748b;line-height:1.5;">Our 200-tree Random Forest model analyzes your symptom pattern.</div></div>
+          </div>
+          <div style="display:flex;gap:1rem;align-items:flex-start;">
+            <div style="width:32px;height:32px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">📋</div>
+            <div><div style="font-weight:600;font-size:0.88rem;margin-bottom:0.2rem;color:#0f172a;">Get Results</div><div style="font-size:0.82rem;color:#64748b;line-height:1.5;">Receive top 3 conditions with confidence scores and precautions.</div></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </main>
 
-<footer>
-  MediPredict — Disease Prediction System &nbsp;|&nbsp; Built with <strong>Django + Random Forest</strong> &nbsp;|&nbsp; TU BCA Final Year Project 2021 Batch
-</footer>
+<footer>MediPredict &nbsp;|&nbsp; TU BCA Final Year Project 2021 &nbsp;|&nbsp; Built with <strong>Django + Random Forest</strong></footer>
 
 <script>
-const SYMPTOMS = {{ symptoms | safe }};
+const SYMPTOMS = {{ symptoms|safe }};
 let selected = [];
 
 const input = document.getElementById('symptom-input');
@@ -405,14 +229,9 @@ const predictBtn = document.getElementById('predict-btn');
 const spinner = document.getElementById('spinner');
 const btnText = document.getElementById('btn-text');
 const errorMsg = document.getElementById('error-msg');
+const countBadge = document.getElementById('count-badge');
 
-function updateTagsLabel() {
-  tagsLabel.textContent = selected.length === 0
-    ? 'Selected symptoms will appear here'
-    : `${selected.length} symptom${selected.length > 1 ? 's' : ''} selected (minimum 3 required)`;
-}
-
-function renderTags() {
+function updateTags() {
   tagsContainer.innerHTML = '';
   selected.forEach(s => {
     const tag = document.createElement('div');
@@ -420,129 +239,88 @@ function renderTags() {
     tag.innerHTML = `${s} <span class="tag-remove" data-s="${s}">×</span>`;
     tagsContainer.appendChild(tag);
   });
-  updateTagsLabel();
-  predictBtn.disabled = selected.length < 3;
+  const n = selected.length;
+  tagsLabel.textContent = n === 0 ? 'Selected symptoms appear here' : `${n} symptom${n > 1 ? 's' : ''} selected (minimum 3 required)`;
+  countBadge.textContent = `${n} selected`;
+  predictBtn.disabled = n < 3;
 }
 
-function renderDropdown(query) {
-  const q = query.toLowerCase();
-  const matches = SYMPTOMS.filter(s => s.toLowerCase().includes(q) && !selected.includes(s)).slice(0, 8);
+function renderDropdown(q) {
+  const matches = SYMPTOMS.filter(s => s.toLowerCase().includes(q.toLowerCase()) && !selected.includes(s)).slice(0, 8);
   if (!matches.length || !q) { dropdown.classList.remove('open'); return; }
-  dropdown.innerHTML = matches.map(s =>
-    `<div class="dd-item" data-s="${s}"><span class="dot"></span>${s}</div>`
-  ).join('');
+  dropdown.innerHTML = matches.map(s => `<div class="dd-item" data-s="${s}"><span class="dd-dot"></span>${s}</div>`).join('');
   dropdown.classList.add('open');
 }
 
 input.addEventListener('input', () => renderDropdown(input.value));
-
 dropdown.addEventListener('click', e => {
   const item = e.target.closest('.dd-item');
   if (!item) return;
-  const s = item.dataset.s;
-  if (!selected.includes(s)) { selected.push(s); renderTags(); }
-  input.value = '';
-  dropdown.classList.remove('open');
-  input.focus();
+  if (!selected.includes(item.dataset.s)) { selected.push(item.dataset.s); updateTags(); }
+  input.value = ''; dropdown.classList.remove('open'); input.focus();
 });
-
 tagsContainer.addEventListener('click', e => {
   const rm = e.target.closest('.tag-remove');
-  if (!rm) return;
-  selected = selected.filter(s => s !== rm.dataset.s);
-  renderTags();
+  if (rm) { selected = selected.filter(s => s !== rm.dataset.s); updateTags(); }
 });
+document.addEventListener('click', e => { if (!e.target.closest('.search-wrap')) dropdown.classList.remove('open'); });
 
-document.addEventListener('click', e => {
-  if (!e.target.closest('.search-input-row')) dropdown.classList.remove('open');
-});
-
-// ── Predict ───────────────────────────────────────────────────────────────────
 predictBtn.addEventListener('click', async () => {
   errorMsg.style.display = 'none';
   spinner.style.display = 'block';
   btnText.textContent = 'Analyzing…';
   predictBtn.disabled = true;
-
   try {
-    const res = await fetch('/predict/', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({symptoms: selected})
-    });
+    const res = await fetch('/predict/', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({symptoms:selected}) });
     const data = await res.json();
-
     if (data.error) { showError(data.error); return; }
     renderResults(data.predictions);
-  } catch (e) {
-    showError('Connection error. Make sure the Django server is running.');
-  } finally {
-    spinner.style.display = 'none';
-    btnText.textContent = '⚡ Predict Disease';
-    predictBtn.disabled = selected.length < 3;
-  }
+  } catch(e) { showError('Connection error. Make sure the server is running.'); }
+  finally { spinner.style.display='none'; btnText.textContent='⚡ Predict Disease'; predictBtn.disabled=selected.length<3; }
 });
 
-function showError(msg) {
-  errorMsg.textContent = msg;
-  errorMsg.style.display = 'block';
-}
+function showError(msg) { errorMsg.textContent=msg; errorMsg.style.display='block'; }
 
-const SEVERITY_COLORS = { Mild: '#22c55e', Moderate: '#f59e0b', Severe: '#ef4444' };
-const PREC_ICONS = ['💊','🥗','🛌','🩺'];
-const RANK_LABELS = ['Primary Match', 'Secondary Match', 'Third Possibility'];
+const SEV = { Mild:{bg:'#f0fdf4',color:'#059669',border:'#bbf7d0'}, Moderate:{bg:'#fffbeb',color:'#d97706',border:'#fde68a'}, Severe:{bg:'#fef2f2',color:'#dc2626',border:'#fecaca'} };
+const RANK = ['Primary Match','Secondary Match','Third Possibility'];
+const ICONS = ['💊','🥗','🛌','🩺'];
+const RCOLORS = ['#2563eb','#7c3aed','#059669'];
 
 function renderResults(predictions) {
   const section = document.getElementById('results-section');
   const container = document.getElementById('results-container');
-  document.getElementById('results-count').textContent = `${predictions.length} conditions found`;
-
+  const emptyRight = document.getElementById('empty-right');
+  document.getElementById('results-count').textContent = `${predictions.length} found`;
   container.innerHTML = '';
   predictions.forEach((p, i) => {
-    const color = SEVERITY_COLORS[p.severity] || '#94a3b8';
+    const sv = SEV[p.severity] || {bg:'#f8fafc',color:'#94a3b8',border:'#e2e8f0'};
+    const rc = RCOLORS[i] || '#2563eb';
     const card = document.createElement('div');
     card.className = 'result-card';
-    card.style.setProperty('--accent-color', color);
+    card.style.setProperty('--rc', rc);
     card.innerHTML = `
       <div class="card-top">
         <div>
-          <div class="card-rank">${RANK_LABELS[i]}</div>
+          <div class="card-rank">${RANK[i]}</div>
           <div class="card-disease">${p.disease}</div>
-          <div class="severity-badge" style="background:${color}22; color:${color}; border: 1px solid ${color}44">
-            <span class="severity-dot" style="background:${color}"></span>
-            ${p.severity} Severity
+          <div class="sev-badge" style="background:${sv.bg};color:${sv.color};border:1px solid ${sv.border}">
+            <span class="sev-dot" style="background:${sv.color}"></span>${p.severity} Severity
           </div>
         </div>
         <div class="card-right">
-          <div class="confidence-big" style="color:${color}">${p.confidence}%</div>
-          <div class="confidence-label">Confidence</div>
+          <div class="conf-big">${p.confidence}%</div>
+          <div class="conf-lbl">Confidence</div>
         </div>
       </div>
-      <div class="conf-bar-wrap">
-        <div class="conf-bar-bg">
-          <div class="conf-bar-fill" style="width:0%" data-width="${p.confidence}%"></div>
-        </div>
-      </div>
-      <div class="precautions-title">Recommended Precautions</div>
-      <div class="precautions-grid">
-        ${p.precautions.map((pr, j) => `
-          <div class="prec-item">
-            <span class="prec-icon">${PREC_ICONS[j] || '✅'}</span> ${pr}
-          </div>`).join('')}
-      </div>
-    `;
+      <div class="conf-bar-wrap"><div class="conf-bar-bg"><div class="conf-bar-fill" style="width:0%" data-w="${p.confidence}%"></div></div></div>
+      <div class="prec-title">Recommended Precautions</div>
+      <div class="prec-grid">${p.precautions.map((pr,j) => `<div class="prec-item"><span>${ICONS[j]||'✓'}</span>${pr}</div>`).join('')}</div>`;
     container.appendChild(card);
   });
-
   section.style.display = 'block';
-  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  // Animate bars after paint
-  setTimeout(() => {
-    document.querySelectorAll('.conf-bar-fill').forEach(bar => {
-      bar.style.width = bar.dataset.width;
-    });
-  }, 100);
+  emptyRight.style.display = 'none';
+  section.scrollIntoView({ behavior:'smooth', block:'start' });
+  setTimeout(() => { document.querySelectorAll('.conf-bar-fill').forEach(b => b.style.width = b.dataset.w); }, 100);
 }
 </script>
 </body>

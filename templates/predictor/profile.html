@@ -6,139 +6,106 @@
 <title>Profile — MediPredict</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:#0a0e1a; color:#e2e8f0; font-family:'DM Sans',sans-serif; min-height:100vh; background-image:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(0,212,255,0.07),transparent); }
-  header { border-bottom:1px solid #1e2d45; padding:1.2rem 2rem; display:flex; align-items:center; gap:0.75rem; background:rgba(10,14,26,0.85); position:sticky; top:0; z-index:100; }
-  .logo-icon { width:38px; height:38px; background:linear-gradient(135deg,#00d4ff,#7c3aed); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
-  .logo-text { font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem; }
-  .logo-text span { color:#00d4ff; }
-  .nav-links { margin-left:auto; display:flex; gap:1rem; align-items:center; }
-  .nav-links a { color:#64748b; text-decoration:none; font-size:0.88rem; transition:color 0.2s; }
-  .nav-links a:hover, .nav-links a.active { color:#00d4ff; }
-  .user-badge { background:rgba(0,212,255,0.1); border:1px solid rgba(0,212,255,0.25); color:#00d4ff; font-size:0.78rem; padding:0.3rem 0.8rem; border-radius:100px; }
-  main { max-width:900px; margin:0 auto; padding:3rem 1.5rem; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#f8fafc; color:#0f172a; font-family:'DM Sans',sans-serif; min-height:100vh; }
+nav { background:#1e293b; padding:0 2rem; height:60px; display:flex; align-items:center; gap:1rem; position:sticky; top:0; z-index:100; box-shadow:0 1px 0 #334155; }
+.logo { display:flex; align-items:center; gap:0.6rem; text-decoration:none; }
+.logo-icon { width:32px; height:32px; background:#2563eb; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.logo-text { font-family:'Syne',sans-serif; font-weight:800; color:white; font-size:1.05rem; }
+.logo-text span { color:#60a5fa; }
+.nav-links { margin-left:auto; display:flex; align-items:center; gap:1.5rem; }
+.nav-links a { color:#94a3b8; text-decoration:none; font-size:0.85rem; font-weight:500; transition:color 0.15s; }
+.nav-links a:hover, .nav-links a.active { color:white; }
+.nav-badge { background:#1d4ed8; color:#bfdbfe; font-size:0.72rem; font-weight:600; padding:0.25rem 0.75rem; border-radius:100px; }
+main { max-width:900px; margin:0 auto; padding:2.5rem 1.5rem; }
+.msg-ok { background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; border-radius:8px; padding:0.7rem 1rem; font-size:0.88rem; margin-bottom:1.5rem; }
+.msg-err { background:#fef2f2; border:1px solid #fecaca; color:#991b1b; border-radius:8px; padding:0.7rem 1rem; font-size:0.88rem; margin-bottom:1.5rem; }
 
-  /* Hero */
-  .profile-hero { display:flex; align-items:center; gap:2rem; margin-bottom:2.5rem; background:#111827; border:1px solid #1e2d45; border-radius:20px; padding:2rem; }
-  .avatar { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#00d4ff,#7c3aed); display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:white; flex-shrink:0; }
-  .profile-info h1 { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; margin-bottom:0.25rem; }
-  .profile-info p { color:#64748b; font-size:0.88rem; }
-  .profile-actions { margin-left:auto; display:flex; gap:0.75rem; }
-  .btn { padding:0.55rem 1.2rem; border-radius:10px; font-size:0.85rem; font-family:'DM Sans',sans-serif; font-weight:500; cursor:pointer; text-decoration:none; transition:all 0.2s; border:none; }
-  .btn-primary { background:linear-gradient(135deg,#00d4ff,#7c3aed); color:white; }
-  .btn-outline { background:transparent; border:1px solid #1e2d45; color:#94a3b8; }
-  .btn-outline:hover { border-color:#00d4ff; color:#00d4ff; }
+.profile-hero { background:white; border:1px solid #e2e8f0; border-radius:16px; padding:1.75rem; display:flex; align-items:center; gap:1.5rem; margin-bottom:1.25rem; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+.avatar { width:72px; height:72px; border-radius:50%; background:#2563eb; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; color:white; flex-shrink:0; }
+.profile-info h1 { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; margin-bottom:0.2rem; }
+.profile-info p { color:#64748b; font-size:0.85rem; }
+.profile-actions { margin-left:auto; }
+.btn-outline { background:white; border:1.5px solid #e2e8f0; color:#475569; padding:0.55rem 1.1rem; border-radius:9px; font-size:0.85rem; font-weight:600; text-decoration:none; transition:all 0.15s; display:inline-flex; align-items:center; gap:0.4rem; }
+.btn-outline:hover { border-color:#2563eb; color:#2563eb; }
 
-  /* Stats row */
-  .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem; }
-  .stat-card { background:#111827; border:1px solid #1e2d45; border-radius:14px; padding:1.25rem; text-align:center; }
-  .stat-val { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; margin-bottom:0.2rem; }
-  .stat-lbl { font-size:0.75rem; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; }
+.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.25rem; }
+.stat-card { background:white; border:1px solid #e2e8f0; border-top:3px solid var(--c); border-radius:12px; padding:1.1rem 1.25rem; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+.stat-val { font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; color:var(--c); margin-bottom:0.2rem; }
+.stat-lbl { font-size:0.7rem; color:#94a3b8; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; }
 
-  /* Grid */
-  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
-  .panel { background:#111827; border:1px solid #1e2d45; border-radius:16px; overflow:hidden; }
-  .panel-header { padding:1rem 1.5rem; border-bottom:1px solid #1e2d45; font-family:'Syne',sans-serif; font-size:0.88rem; font-weight:700; }
-  .panel-body { padding:1.5rem; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+.panel { background:white; border:1px solid #e2e8f0; border-radius:14px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+.panel-header { padding:0.9rem 1.25rem; border-bottom:1px solid #f1f5f9; font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:700; color:#0f172a; }
+.panel-body { padding:1.25rem; }
 
-  /* Form */
-  .field { margin-bottom:1.1rem; }
-  label { display:block; font-size:0.75rem; font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:#64748b; margin-bottom:0.4rem; }
-  input[type=text], input[type=email] { width:100%; background:#0a0e1a; border:1px solid #1e2d45; border-radius:10px; padding:0.75rem 1rem; color:#e2e8f0; font-size:0.9rem; font-family:'DM Sans',sans-serif; outline:none; transition:border-color 0.2s; }
-  input:focus { border-color:#00d4ff; }
-  .save-btn { width:100%; padding:0.8rem; background:linear-gradient(135deg,#00d4ff,#7c3aed); border:none; border-radius:10px; color:white; font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:700; cursor:pointer; margin-top:0.5rem; transition:opacity 0.2s; }
-  .save-btn:hover { opacity:0.9; }
+.field { margin-bottom:0.9rem; }
+label { display:block; font-size:0.72rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#64748b; margin-bottom:0.35rem; }
+input[type=text], input[type=email] { width:100%; background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:9px; padding:0.72rem 0.9rem; color:#0f172a; font-size:0.88rem; font-family:'DM Sans',sans-serif; outline:none; transition:border-color 0.15s; }
+input:focus { border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,0.1); background:white; }
+.save-btn { width:100%; padding:0.78rem; background:#2563eb; border:none; border-radius:9px; color:white; font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:700; cursor:pointer; margin-top:0.5rem; transition:background 0.15s; }
+.save-btn:hover { background:#1d4ed8; }
 
-  /* Recent predictions */
-  .pred-item { padding:0.85rem 0; border-bottom:1px solid #1a2235; display:flex; align-items:center; gap:1rem; }
-  .pred-item:last-child { border-bottom:none; }
-  .pred-disease { font-weight:600; font-size:0.9rem; flex:1; }
-  .pred-date { color:#64748b; font-size:0.78rem; }
-  .sev { padding:0.2rem 0.65rem; border-radius:100px; font-size:0.72rem; font-weight:600; }
-
-  /* Messages */
-  .msg-success { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); color:#86efac; border-radius:10px; padding:0.75rem 1rem; font-size:0.88rem; margin-bottom:1.5rem; }
-  .msg-error { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; border-radius:10px; padding:0.75rem 1rem; font-size:0.88rem; margin-bottom:1.5rem; }
+.pred-item { padding:0.85rem 0; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:0.75rem; }
+.pred-item:last-child { border-bottom:none; }
+.pred-disease { font-weight:600; font-size:0.88rem; flex:1; color:#0f172a; }
+.pred-date { color:#94a3b8; font-size:0.76rem; }
+.sev { padding:0.18rem 0.6rem; border-radius:100px; font-size:0.7rem; font-weight:600; }
 </style>
 </head>
 <body>
-<header>
-  <div class="logo-icon">🩺</div>
-  <div class="logo-text">Medi<span>Predict</span></div>
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-icon">🩺</div>
+    <div class="logo-text">Medi<span>Predict</span></div>
+  </a>
   <div class="nav-links">
     <a href="/">Predict</a>
     <a href="/history/">History</a>
+    <a href="/chatbot/">Chatbot</a>
+    <a href="/about/">About</a>
     <a href="/profile/" class="active">Profile</a>
-    <span class="user-badge">{{ request.user.username }}</span>
+    <span class="nav-badge">{{ request.user.username }}</span>
     <a href="/logout/">Logout</a>
   </div>
-</header>
-
+</nav>
 <main>
   {% for message in messages %}
-    <div class="{% if 'successfully' in message.message %}msg-success{% else %}msg-error{% endif %}">{{ message }}</div>
+  <div class="{% if 'successfully' in message.message %}msg-ok{% else %}msg-err{% endif %}">{{ message }}</div>
   {% endfor %}
 
-  <!-- Hero -->
   <div class="profile-hero">
     <div class="avatar">{{ request.user.username|first|upper }}</div>
     <div class="profile-info">
       <h1>{{ request.user.get_full_name|default:request.user.username }}</h1>
       <p>@{{ request.user.username }} &nbsp;·&nbsp; Member since {{ request.user.date_joined|date:"M Y" }}</p>
-      <p style="margin-top:0.3rem; color:#64748b;">{{ request.user.email|default:"No email set" }}</p>
+      <p style="margin-top:0.2rem;">{{ request.user.email|default:"No email set" }}</p>
     </div>
     <div class="profile-actions">
-      <a href="/change-password/" class="btn btn-outline">🔐 Change Password</a>
+      <a href="/change-password/" class="btn-outline">🔐 Change Password</a>
     </div>
   </div>
 
-  <!-- Stats -->
   <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-val" style="color:#00d4ff">{{ pred_count }}</div>
-      <div class="stat-lbl">Total Predictions</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-val" style="color:#22c55e">{{ mild }}</div>
-      <div class="stat-lbl">Mild Cases</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-val" style="color:#f59e0b">{{ moderate }}</div>
-      <div class="stat-lbl">Moderate Cases</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-val" style="color:#ef4444">{{ severe }}</div>
-      <div class="stat-lbl">Severe Cases</div>
-    </div>
+    <div class="stat-card" style="--c:#2563eb"><div class="stat-val">{{ pred_count }}</div><div class="stat-lbl">Total</div></div>
+    <div class="stat-card" style="--c:#059669"><div class="stat-val">{{ mild }}</div><div class="stat-lbl">Mild</div></div>
+    <div class="stat-card" style="--c:#d97706"><div class="stat-val">{{ moderate }}</div><div class="stat-lbl">Moderate</div></div>
+    <div class="stat-card" style="--c:#dc2626"><div class="stat-val">{{ severe }}</div><div class="stat-lbl">Severe</div></div>
   </div>
 
-  <!-- Two column -->
   <div class="two-col">
-
-    <!-- Edit Profile -->
     <div class="panel">
       <div class="panel-header">✏️ Edit Profile</div>
       <div class="panel-body">
         <form method="POST">
           {% csrf_token %}
-          <div class="field">
-            <label>First Name</label>
-            <input type="text" name="first_name" value="{{ request.user.first_name }}" placeholder="Enter first name">
-          </div>
-          <div class="field">
-            <label>Last Name</label>
-            <input type="text" name="last_name" value="{{ request.user.last_name }}" placeholder="Enter last name">
-          </div>
-          <div class="field">
-            <label>Email Address</label>
-            <input type="email" name="email" value="{{ request.user.email }}" placeholder="your@email.com">
-          </div>
+          <div class="field"><label>First Name</label><input type="text" name="first_name" value="{{ request.user.first_name }}" placeholder="First name"></div>
+          <div class="field"><label>Last Name</label><input type="text" name="last_name" value="{{ request.user.last_name }}" placeholder="Last name"></div>
+          <div class="field"><label>Email</label><input type="email" name="email" value="{{ request.user.email }}" placeholder="your@email.com"></div>
           <button type="submit" class="save-btn">Save Changes</button>
         </form>
       </div>
     </div>
-
-    <!-- Recent predictions -->
     <div class="panel">
       <div class="panel-header">🕐 Recent Predictions</div>
       <div class="panel-body">
@@ -148,24 +115,16 @@
             <div class="pred-disease">{{ p.disease }}</div>
             <div class="pred-date">{{ p.created_at|date:"M d, Y · h:i A" }}</div>
           </div>
-          {% if p.severity == 'Mild' %}
-          <span class="sev" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">Mild</span>
-          {% elif p.severity == 'Moderate' %}
-          <span class="sev" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">Moderate</span>
-          {% else %}
-          <span class="sev" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">Severe</span>
-          {% endif %}
-          <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:#00d4ff;">{{ p.confidence }}%</span>
+          {% if p.severity == 'Mild' %}<span class="sev" style="background:#f0fdf4;color:#059669;border:1px solid #bbf7d0">Mild</span>
+          {% elif p.severity == 'Moderate' %}<span class="sev" style="background:#fffbeb;color:#d97706;border:1px solid #fde68a">Moderate</span>
+          {% else %}<span class="sev" style="background:#fef2f2;color:#dc2626;border:1px solid #fecaca">Severe</span>{% endif %}
+          <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.88rem;color:#2563eb;">{{ p.confidence }}%</span>
         </div>
-        {% empty %}
-        <p style="color:#64748b;font-size:0.88rem;padding:1rem 0;">No predictions yet. <a href="/" style="color:#00d4ff;">Make one!</a></p>
+        {% empty %}<p style="color:#94a3b8;font-size:0.88rem;padding:1rem 0;">No predictions yet. <a href="/" style="color:#2563eb;">Make one!</a></p>
         {% endfor %}
-        {% if pred_count > 5 %}
-        <a href="/history/" style="display:block;text-align:center;color:#00d4ff;font-size:0.85rem;margin-top:1rem;text-decoration:none;">View all {{ pred_count }} predictions →</a>
-        {% endif %}
+        {% if pred_count > 5 %}<a href="/history/" style="display:block;text-align:center;color:#2563eb;font-size:0.83rem;margin-top:1rem;text-decoration:none;font-weight:600;">View all {{ pred_count }} →</a>{% endif %}
       </div>
     </div>
-
   </div>
 </main>
 </body>
