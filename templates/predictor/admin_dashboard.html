@@ -6,441 +6,225 @@
 <title>Admin Dashboard — MediPredict</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #070b14;
-    --surface: #0e1525;
-    --surface2: #151f33;
-    --border: #1a2744;
-    --accent: #00d4ff;
-    --accent2: #7c3aed;
-    --green: #22c55e;
-    --amber: #f59e0b;
-    --red: #ef4444;
-    --text: #e2e8f0;
-    --muted: #4a5568;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    background-image:
-      radial-gradient(ellipse 60% 40% at 10% 0%, rgba(0,212,255,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 30% at 90% 100%, rgba(124,58,237,0.06) 0%, transparent 60%);
-  }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#f8fafc; color:#0f172a; font-family:'DM Sans',sans-serif; min-height:100vh; }
 
-  /* ── Sidebar ── */
-  .layout { display: flex; min-height: 100vh; }
-  .sidebar {
-    width: 240px; flex-shrink: 0;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    display: flex; flex-direction: column;
-    padding: 1.5rem 0;
-    position: sticky; top: 0; height: 100vh;
-  }
-  .sidebar-logo {
-    display: flex; align-items: center; gap: 0.6rem;
-    padding: 0 1.5rem 2rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 1.5rem;
-  }
-  .logo-icon { width:34px; height:34px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1rem; }
-  .logo-text { font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem; }
-  .logo-text span { color: var(--accent); }
+.layout { display:flex; min-height:100vh; }
 
-  .nav-section { padding: 0 1rem; margin-bottom: 0.5rem; }
-  .nav-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 0 0.5rem; margin-bottom: 0.4rem; }
-  .nav-item {
-    display: flex; align-items: center; gap: 0.65rem;
-    padding: 0.65rem 0.75rem; border-radius: 10px;
-    color: #64748b; text-decoration: none; font-size: 0.88rem;
-    transition: all 0.15s; margin-bottom: 0.15rem;
-  }
-  .nav-item:hover { background: rgba(0,212,255,0.06); color: var(--text); }
-  .nav-item.active { background: rgba(0,212,255,0.1); color: var(--accent); }
-  .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+/* Sidebar */
+.sidebar { width:230px; flex-shrink:0; background:#1e293b; display:flex; flex-direction:column; padding:0; position:sticky; top:0; height:100vh; }
+.sidebar-logo { display:flex; align-items:center; gap:0.6rem; padding:1.25rem 1.5rem; border-bottom:1px solid #334155; }
+.logo-icon { width:32px; height:32px; background:#2563eb; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.logo-text { font-family:'Syne',sans-serif; font-weight:800; color:white; font-size:1rem; }
+.logo-text span { color:#60a5fa; }
 
-  .sidebar-footer { margin-top: auto; padding: 1rem; border-top: 1px solid var(--border); }
-  .admin-badge {
-    display: flex; align-items: center; gap: 0.6rem;
-    padding: 0.6rem 0.75rem;
-    background: var(--surface2); border-radius: 10px;
-    font-size: 0.82rem;
-  }
-  .admin-avatar { width:28px; height:28px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; color:white; }
+.nav-section { padding:1rem 0.75rem 0; }
+.nav-label { font-size:0.65rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#475569; padding:0 0.5rem; margin-bottom:0.3rem; }
+.nav-item { display:flex; align-items:center; gap:0.6rem; padding:0.6rem 0.75rem; border-radius:8px; color:#94a3b8; text-decoration:none; font-size:0.85rem; transition:all 0.15s; margin-bottom:0.1rem; }
+.nav-item:hover { background:rgba(255,255,255,0.06); color:white; }
+.nav-item.active { background:rgba(37,99,235,0.2); color:#60a5fa; }
+.nav-icon { font-size:0.95rem; width:18px; text-align:center; }
 
-  /* ── Main ── */
-  .main { flex: 1; overflow-x: hidden; }
-  .topbar {
-    padding: 1.25rem 2rem;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-    background: rgba(7,11,20,0.8); backdrop-filter: blur(10px);
-    position: sticky; top: 0; z-index: 50;
-  }
-  .topbar h1 { font-family:'Syne',sans-serif; font-size: 1.1rem; font-weight: 700; }
-  .topbar-right { display:flex; gap:0.75rem; align-items:center; }
-  .btn-sm {
-    padding: 0.45rem 1rem; border-radius: 8px; font-size: 0.82rem;
-    font-family: 'DM Sans', sans-serif; cursor: pointer;
-    text-decoration: none; transition: opacity 0.15s;
-  }
-  .btn-outline { border: 1px solid var(--border); background: transparent; color: var(--text); }
-  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.sidebar-footer { margin-top:auto; padding:1rem; border-top:1px solid #334155; }
+.admin-badge { display:flex; align-items:center; gap:0.6rem; padding:0.6rem 0.75rem; background:rgba(255,255,255,0.05); border-radius:8px; }
+.admin-avatar { width:28px; height:28px; background:#2563eb; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; color:white; flex-shrink:0; }
+.admin-name { font-size:0.83rem; font-weight:600; color:white; }
+.admin-role { font-size:0.7rem; color:#64748b; }
 
-  .content { padding: 2rem; }
+/* Main */
+.main { flex:1; overflow-x:hidden; }
+.topbar { padding:1rem 2rem; border-bottom:1px solid #e2e8f0; display:flex; align-items:center; justify-content:space-between; background:white; position:sticky; top:0; z-index:50; }
+.topbar h1 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; color:#0f172a; }
+.topbar-right { display:flex; gap:0.6rem; }
+.btn-sm { padding:0.4rem 0.9rem; border-radius:7px; font-size:0.8rem; cursor:pointer; text-decoration:none; transition:all 0.15s; border:1.5px solid #e2e8f0; background:white; color:#475569; font-family:'DM Sans',sans-serif; }
+.btn-sm:hover { border-color:#2563eb; color:#2563eb; }
 
-  /* ── Stat Cards ── */
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px; padding: 1.4rem;
-    position: relative; overflow: hidden;
-    animation: fadeUp 0.4s ease both;
-  }
-  .stat-card::before {
-    content: ''; position: absolute;
-    top: 0; left: 0; right: 0; height: 2px;
-    background: var(--card-accent, var(--accent));
-  }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-  .stat-card:nth-child(1) { animation-delay: 0.05s; }
-  .stat-card:nth-child(2) { animation-delay: 0.10s; }
-  .stat-card:nth-child(3) { animation-delay: 0.15s; }
-  .stat-card:nth-child(4) { animation-delay: 0.20s; }
+.content { padding:1.75rem 2rem; }
 
-  .stat-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
-  .stat-value { font-family:'Syne',sans-serif; font-size: 2.2rem; font-weight: 800; line-height: 1; margin-bottom: 0.3rem; }
-  .stat-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+/* Stats */
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.5rem; }
+.stat-card { background:white; border:1px solid #e2e8f0; border-top:3px solid var(--c); border-radius:12px; padding:1.25rem; animation:fadeUp 0.4s ease both; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.stat-card:nth-child(1){animation-delay:.05s}.stat-card:nth-child(2){animation-delay:.1s}.stat-card:nth-child(3){animation-delay:.15s}.stat-card:nth-child(4){animation-delay:.2s}
+.stat-icon { font-size:1.2rem; margin-bottom:0.6rem; }
+.stat-val { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:var(--c); line-height:1; margin-bottom:0.2rem; }
+.stat-lbl { font-size:0.7rem; color:#94a3b8; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; }
 
-  /* ── Grid layout ── */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
-  .full-col { margin-bottom: 1.25rem; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-bottom:1.25rem; }
+.panel { background:white; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.04); animation:fadeUp 0.4s ease 0.25s both; }
+.panel-header { padding:0.9rem 1.25rem; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; }
+.panel-title { font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:700; color:#0f172a; }
+.panel-count { font-size:0.72rem; color:#94a3b8; background:#f8fafc; border:1px solid #e2e8f0; padding:0.18rem 0.6rem; border-radius:100px; }
+.full-col { background:white; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; margin-bottom:1.25rem; box-shadow:0 1px 3px rgba(0,0,0,0.04); animation:fadeUp 0.4s ease 0.25s both; }
 
-  /* ── Panel ── */
-  .panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px; overflow: hidden;
-    animation: fadeUp 0.4s ease 0.25s both;
-  }
-  .panel-header {
-    padding: 1.1rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .panel-title { font-family:'Syne',sans-serif; font-size: 0.9rem; font-weight: 700; }
-  .panel-count { font-size: 0.75rem; color: var(--muted); background: var(--surface2); padding: 0.2rem 0.6rem; border-radius: 100px; border: 1px solid var(--border); }
+/* Disease bars */
+.disease-list { padding:1rem 1.25rem; }
+.disease-item { margin-bottom:0.85rem; }
+.disease-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.28rem; }
+.disease-name { font-size:0.85rem; font-weight:500; color:#0f172a; }
+.disease-count { font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:700; color:#2563eb; }
+.bar-bg { height:5px; background:#f1f5f9; border-radius:10px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:10px; background:#2563eb; transition:width 1s cubic-bezier(0.34,1.56,0.64,1); }
 
-  /* ── Disease bars ── */
-  .disease-list { padding: 1rem 1.5rem; }
-  .disease-item { margin-bottom: 1rem; }
-  .disease-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem; }
-  .disease-name { font-size: 0.88rem; font-weight: 500; }
-  .disease-count { font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:700; color: var(--accent); }
-  .bar-bg { height: 6px; background: var(--surface2); border-radius: 10px; overflow:hidden; }
-  .bar-fill { height:100%; border-radius:10px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 1s cubic-bezier(0.34,1.56,0.64,1); }
+/* Donut */
+.severity-wrap { padding:1.25rem; display:flex; flex-direction:column; align-items:center; gap:1rem; }
+svg.donut { transform:rotate(-90deg); }
+.donut-container { position:relative; width:130px; height:130px; }
+.donut-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.donut-total { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; color:#0f172a; }
+.donut-label { font-size:0.68rem; color:#94a3b8; text-transform:uppercase; letter-spacing:0.06em; }
+.severity-legend { display:flex; gap:1.25rem; }
+.leg-item { display:flex; align-items:center; gap:0.35rem; font-size:0.8rem; color:#475569; }
+.leg-dot { width:8px; height:8px; border-radius:50%; }
 
-  /* ── Severity donut ── */
-  .severity-wrap { padding: 1.5rem; display:flex; flex-direction:column; align-items:center; gap:1.25rem; }
-  .donut-container { position:relative; width:140px; height:140px; }
-  svg.donut { transform: rotate(-90deg); }
-  .donut-center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-  .donut-total { font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; }
-  .donut-label { font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; }
-  .severity-legend { display:flex; gap:1.5rem; }
-  .leg-item { display:flex; align-items:center; gap:0.4rem; font-size:0.82rem; }
-  .leg-dot { width:10px; height:10px; border-radius:50%; }
-
-  /* ── Table ── */
-  .table-wrap { overflow-x: auto; }
-  table { width:100%; border-collapse:collapse; }
-  th {
-    padding: 0.7rem 1.25rem; text-align:left;
-    font-size: 0.7rem; font-weight:700; letter-spacing:0.08em;
-    text-transform:uppercase; color:var(--muted);
-    border-bottom: 1px solid var(--border);
-    background: var(--surface2);
-  }
-  td { padding: 0.85rem 1.25rem; font-size:0.88rem; border-bottom: 1px solid rgba(26,39,68,0.5); }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(0,212,255,0.03); }
-  .td-disease { font-weight:600; }
-  .td-user { color: var(--accent); font-size:0.82rem; }
-  .td-date { color: var(--muted); font-size:0.8rem; }
-  .sev-badge { padding:0.2rem 0.65rem; border-radius:100px; font-size:0.72rem; font-weight:600; }
-
-  /* ── Users table ── */
-  .user-avatar-sm { width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:inline-flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:700; color:white; margin-right:0.5rem; vertical-align:middle; }
+/* Table */
+.table-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; }
+th { padding:0.65rem 1.1rem; text-align:left; font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#94a3b8; border-bottom:1px solid #e2e8f0; background:#f8fafc; }
+td { padding:0.8rem 1.1rem; font-size:0.85rem; border-bottom:1px solid #f8fafc; color:#0f172a; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:#f8fafc; }
+.td-user { color:#2563eb; font-size:0.8rem; font-weight:600; }
+.td-date { color:#94a3b8; font-size:0.78rem; }
+.sev-badge { padding:0.18rem 0.6rem; border-radius:100px; font-size:0.7rem; font-weight:600; }
+.user-av { width:26px; height:26px; border-radius:50%; background:#eff6ff; border:1px solid #bfdbfe; display:inline-flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; color:#1d4ed8; margin-right:0.4rem; vertical-align:middle; }
 </style>
 </head>
 <body>
 <div class="layout">
-
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-icon">🩺</div>
       <div class="logo-text">Medi<span>Predict</span></div>
     </div>
-
     <div class="nav-section">
       <div class="nav-label">Main</div>
-      <a href="/dashboard/" class="nav-item active">
-        <span class="nav-icon">📊</span> Dashboard
-      </a>
-      <a href="/admin/predictor/prediction/" class="nav-item">
-        <span class="nav-icon">🔬</span> Predictions
-      </a>
-      <a href="/admin/auth/user/" class="nav-item">
-        <span class="nav-icon">👥</span> Users
-      </a>
+      <a href="/dashboard/" class="nav-item active"><span class="nav-icon">📊</span> Dashboard</a>
+      <a href="/admin/predictor/prediction/" class="nav-item"><span class="nav-icon">🔬</span> Predictions</a>
+      <a href="/admin/auth/user/" class="nav-item"><span class="nav-icon">👥</span> Users</a>
     </div>
-
-    <div class="nav-section" style="margin-top:1rem;">
+    <div class="nav-section" style="margin-top:0.75rem;">
       <div class="nav-label">App</div>
-      <a href="/" class="nav-item">
-        <span class="nav-icon">🏠</span> Main App
-      </a>
-      <a href="/admin/" class="nav-item">
-        <span class="nav-icon">⚙️</span> Django Admin
-      </a>
+      <a href="/" class="nav-item"><span class="nav-icon">🏠</span> Main App</a>
+      <a href="/admin/" class="nav-item"><span class="nav-icon">⚙️</span> Django Admin</a>
     </div>
-
     <div class="sidebar-footer">
       <div class="admin-badge">
         <div class="admin-avatar">{{ request.user.username|first|upper }}</div>
-        <div>
-          <div style="font-weight:600; font-size:0.85rem;">{{ request.user.username }}</div>
-          <div style="font-size:0.72rem; color:#64748b;">Administrator</div>
-        </div>
+        <div><div class="admin-name">{{ request.user.username }}</div><div class="admin-role">Administrator</div></div>
       </div>
     </div>
   </aside>
 
-  <!-- Main Content -->
   <div class="main">
     <div class="topbar">
       <h1>Admin Dashboard</h1>
       <div class="topbar-right">
-        <a href="/" class="btn-sm btn-outline">← View App</a>
-        <a href="/logout/" class="btn-sm btn-outline">Logout</a>
+        <a href="/" class="btn-sm">← View App</a>
+        <a href="/logout/" class="btn-sm">Logout</a>
       </div>
     </div>
 
     <div class="content">
-
-      <!-- Stats -->
       <div class="stats-grid">
-        <div class="stat-card" style="--card-accent:#00d4ff">
-          <div class="stat-icon">👥</div>
-          <div class="stat-value" style="color:#00d4ff">{{ total_users }}</div>
-          <div class="stat-label">Total Users</div>
-        </div>
-        <div class="stat-card" style="--card-accent:#7c3aed">
-          <div class="stat-icon">🔬</div>
-          <div class="stat-value" style="color:#7c3aed">{{ total_predictions }}</div>
-          <div class="stat-label">Total Predictions</div>
-        </div>
-        <div class="stat-card" style="--card-accent:#ef4444">
-          <div class="stat-icon">🚨</div>
-          <div class="stat-value" style="color:#ef4444">{{ severe_count }}</div>
-          <div class="stat-label">Severe Cases</div>
-        </div>
-        <div class="stat-card" style="--card-accent:#22c55e">
-          <div class="stat-icon">✅</div>
-          <div class="stat-value" style="color:#22c55e">{{ mild_count }}</div>
-          <div class="stat-label">Mild Cases</div>
-        </div>
+        <div class="stat-card" style="--c:#2563eb"><div class="stat-icon">👥</div><div class="stat-val">{{ total_users }}</div><div class="stat-lbl">Total Users</div></div>
+        <div class="stat-card" style="--c:#7c3aed"><div class="stat-icon">🔬</div><div class="stat-val">{{ total_predictions }}</div><div class="stat-lbl">Predictions</div></div>
+        <div class="stat-card" style="--c:#dc2626"><div class="stat-icon">🚨</div><div class="stat-val">{{ severe_count }}</div><div class="stat-lbl">Severe Cases</div></div>
+        <div class="stat-card" style="--c:#059669"><div class="stat-icon">✅</div><div class="stat-val">{{ mild_count }}</div><div class="stat-lbl">Mild Cases</div></div>
       </div>
 
-      <!-- Middle row: Top Diseases + Severity -->
       <div class="two-col">
-
-        <!-- Top Diseases -->
         <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">🏆 Top Predicted Diseases</span>
-            <span class="panel-count">Top 5</span>
-          </div>
+          <div class="panel-header"><span class="panel-title">🏆 Top Predicted Diseases</span><span class="panel-count">Top 5</span></div>
           <div class="disease-list">
             {% for d in top_diseases %}
             <div class="disease-item">
-              <div class="disease-row">
-                <span class="disease-name">{{ d.disease }}</span>
-                <span class="disease-count">{{ d.count }}</span>
-              </div>
-              <div class="bar-bg">
-                <div class="bar-fill" style="width:0%" data-width="{% if top_diseases.0.count > 0 %}{% widthratio d.count top_diseases.0.count 100 %}{% else %}0{% endif %}%"></div>
-              </div>
+              <div class="disease-row"><span class="disease-name">{{ d.disease }}</span><span class="disease-count">{{ d.count }}</span></div>
+              <div class="bar-bg"><div class="bar-fill" style="width:0%" data-width="{% if top_diseases.0.count > 0 %}{% widthratio d.count top_diseases.0.count 100 %}{% else %}0{% endif %}%"></div></div>
             </div>
-            {% empty %}
-            <p style="color:#64748b; font-size:0.88rem; padding:1rem 0;">No predictions yet.</p>
-            {% endfor %}
+            {% empty %}<p style="color:#94a3b8;font-size:0.85rem;padding:1rem 0;">No predictions yet.</p>{% endfor %}
           </div>
         </div>
 
-        <!-- Severity Breakdown -->
         <div class="panel">
-          <div class="panel-header">
-            <span class="panel-title">📈 Severity Breakdown</span>
-            <span class="panel-count">{{ total_predictions }} total</span>
-          </div>
+          <div class="panel-header"><span class="panel-title">📊 Severity Breakdown</span><span class="panel-count">{{ total_predictions }} total</span></div>
           <div class="severity-wrap">
             {% if total_predictions > 0 %}
             <div class="donut-container">
-              {% with mild_pct=mild_count|floatformat:0 mod_pct=moderate_count|floatformat:0 sev_pct=severe_count|floatformat:0 %}
-              <svg class="donut" width="140" height="140" viewBox="0 0 140 140">
-                <!-- Background circle -->
-                <circle cx="70" cy="70" r="54" fill="none" stroke="#1a2744" stroke-width="18"/>
-                <!-- Mild - green -->
-                {% if mild_count %}
-                <circle cx="70" cy="70" r="54" fill="none" stroke="#22c55e" stroke-width="18"
-                  stroke-dasharray="{% widthratio mild_count total_predictions 339 %} 339"
-                  stroke-dashoffset="0"/>
-                {% endif %}
-                <!-- Moderate - amber -->
-                {% if moderate_count %}
-                <circle cx="70" cy="70" r="54" fill="none" stroke="#f59e0b" stroke-width="18"
-                  stroke-dasharray="{% widthratio moderate_count total_predictions 339 %} 339"
-                  stroke-dashoffset="-{% widthratio mild_count total_predictions 339 %}"/>
-                {% endif %}
-                <!-- Severe - red -->
-                {% if severe_count %}
-                <circle cx="70" cy="70" r="54" fill="none" stroke="#ef4444" stroke-width="18"
-                  stroke-dasharray="{% widthratio severe_count total_predictions 339 %} 339"
-                  stroke-dashoffset="-{% widthratio mild_count total_predictions 339 %} -{% widthratio moderate_count total_predictions 339 %}"/>
-                {% endif %}
+              <svg class="donut" width="130" height="130" viewBox="0 0 130 130">
+                <circle cx="65" cy="65" r="50" fill="none" stroke="#f1f5f9" stroke-width="16"/>
+                {% if mild_count %}<circle cx="65" cy="65" r="50" fill="none" stroke="#059669" stroke-width="16" stroke-dasharray="{% widthratio mild_count total_predictions 314 %} 314" stroke-dashoffset="0"/>{% endif %}
+                {% if moderate_count %}<circle cx="65" cy="65" r="50" fill="none" stroke="#d97706" stroke-width="16" stroke-dasharray="{% widthratio moderate_count total_predictions 314 %} 314" stroke-dashoffset="-{% widthratio mild_count total_predictions 314 %}"/>{% endif %}
+                {% if severe_count %}<circle cx="65" cy="65" r="50" fill="none" stroke="#dc2626" stroke-width="16" stroke-dasharray="{% widthratio severe_count total_predictions 314 %} 314" stroke-dashoffset="-{% widthratio mild_count total_predictions 314 %} -{% widthratio moderate_count total_predictions 314 %}"/>{% endif %}
               </svg>
-              {% endwith %}
-              <div class="donut-center">
-                <div class="donut-total">{{ total_predictions }}</div>
-                <div class="donut-label">Cases</div>
-              </div>
+              <div class="donut-center"><div class="donut-total">{{ total_predictions }}</div><div class="donut-label">Cases</div></div>
             </div>
-            {% else %}
-            <div style="color:#64748b; font-size:0.88rem;">No data yet.</div>
-            {% endif %}
+            {% else %}<div style="color:#94a3b8;font-size:0.88rem;">No data yet.</div>{% endif %}
             <div class="severity-legend">
-              <div class="leg-item"><div class="leg-dot" style="background:#22c55e"></div> Mild ({{ mild_count }})</div>
-              <div class="leg-item"><div class="leg-dot" style="background:#f59e0b"></div> Moderate ({{ moderate_count }})</div>
-              <div class="leg-item"><div class="leg-dot" style="background:#ef4444"></div> Severe ({{ severe_count }})</div>
+              <div class="leg-item"><div class="leg-dot" style="background:#059669"></div>Mild ({{ mild_count }})</div>
+              <div class="leg-item"><div class="leg-dot" style="background:#d97706"></div>Moderate ({{ moderate_count }})</div>
+              <div class="leg-item"><div class="leg-dot" style="background:#dc2626"></div>Severe ({{ severe_count }})</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Recent Predictions -->
-      <div class="panel full-col">
-        <div class="panel-header">
-          <span class="panel-title">🕐 Recent Predictions</span>
-          <span class="panel-count">Latest 10</span>
-        </div>
+      <div class="full-col">
+        <div class="panel-header"><span class="panel-title">🕐 Recent Predictions</span><span class="panel-count">Latest 10</span></div>
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Disease</th>
-                <th>Symptoms</th>
-                <th>Severity</th>
-                <th>Confidence</th>
-                <th>Date</th>
-              </tr>
-            </thead>
+            <thead><tr><th>User</th><th>Disease</th><th>Symptoms</th><th>Severity</th><th>Confidence</th><th>Date</th></tr></thead>
             <tbody>
               {% for p in recent %}
               <tr>
+                <td><span class="user-av">{{ p.user.username|first|upper }}</span><span class="td-user">{{ p.user.username }}</span></td>
+                <td style="font-weight:600;">{{ p.disease }}</td>
+                <td style="color:#94a3b8;font-size:0.8rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ p.symptoms }}</td>
                 <td>
-                  <span class="user-avatar-sm">{{ p.user.username|first|upper }}</span>
-                  <span class="td-user">{{ p.user.username }}</span>
+                  {% if p.severity == 'Mild' %}<span class="sev-badge" style="background:#f0fdf4;color:#059669;border:1px solid #bbf7d0">Mild</span>
+                  {% elif p.severity == 'Moderate' %}<span class="sev-badge" style="background:#fffbeb;color:#d97706;border:1px solid #fde68a">Moderate</span>
+                  {% else %}<span class="sev-badge" style="background:#fef2f2;color:#dc2626;border:1px solid #fecaca">Severe</span>{% endif %}
                 </td>
-                <td class="td-disease">{{ p.disease }}</td>
-                <td style="color:#64748b; font-size:0.82rem; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ p.symptoms }}</td>
-                <td>
-                  {% if p.severity == 'Mild' %}
-                  <span class="sev-badge" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">Mild</span>
-                  {% elif p.severity == 'Moderate' %}
-                  <span class="sev-badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">Moderate</span>
-                  {% else %}
-                  <span class="sev-badge" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">Severe</span>
-                  {% endif %}
-                </td>
-                <td style="font-family:'Syne',sans-serif; font-weight:700;">
-                  {% if p.severity == 'Mild' %}<span style="color:#22c55e">{% elif p.severity == 'Moderate' %}<span style="color:#f59e0b">{% else %}<span style="color:#ef4444">{% endif %}
-                  {{ p.confidence }}%</span>
-                </td>
+                <td style="font-family:'Syne',sans-serif;font-weight:700;color:#2563eb;">{{ p.confidence }}%</td>
                 <td class="td-date">{{ p.created_at|date:"M d, Y" }}<br>{{ p.created_at|time:"h:i A" }}</td>
               </tr>
-              {% empty %}
-              <tr><td colspan="6" style="text-align:center; color:#64748b; padding:2rem;">No predictions yet.</td></tr>
-              {% endfor %}
+              {% empty %}<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:2rem;">No predictions yet.</td></tr>{% endfor %}
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Users Table -->
-      <div class="panel full-col">
-        <div class="panel-header">
-          <span class="panel-title">👥 Registered Users</span>
-          <span class="panel-count">{{ total_users }} users</span>
-        </div>
+      <div class="full-col">
+        <div class="panel-header"><span class="panel-title">👥 Registered Users</span><span class="panel-count">{{ total_users }} users</span></div>
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Joined</th>
-                <th>Predictions</th>
-                <th>Role</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Username</th><th>Email</th><th>Joined</th><th>Predictions</th><th>Role</th></tr></thead>
             <tbody>
               {% for u in users %}
               <tr>
-                <td>
-                  <span class="user-avatar-sm">{{ u.username|first|upper }}</span>
-                  <strong>{{ u.username }}</strong>
-                </td>
-                <td style="color:#64748b">{{ u.email|default:"—" }}</td>
+                <td><span class="user-av">{{ u.username|first|upper }}</span><strong>{{ u.username }}</strong></td>
+                <td style="color:#64748b;">{{ u.email|default:"—" }}</td>
                 <td class="td-date">{{ u.date_joined|date:"M d, Y" }}</td>
+                <td style="font-family:'Syne',sans-serif;font-weight:700;color:#2563eb;">{{ u.pred_count }}</td>
                 <td>
-                  <span style="font-family:'Syne',sans-serif; font-weight:700; color:#00d4ff;">{{ u.pred_count }}</span>
-                </td>
-                <td>
-                  {% if u.is_superuser %}
-                  <span class="sev-badge" style="background:#7c3aed22;color:#a78bfa;border:1px solid #7c3aed44">Superuser</span>
-                  {% elif u.is_staff %}
-                  <span class="sev-badge" style="background:#00d4ff22;color:#00d4ff;border:1px solid #00d4ff44">Staff</span>
-                  {% else %}
-                  <span class="sev-badge" style="background:#1a274422;color:#64748b;border:1px solid #1a274444">User</span>
-                  {% endif %}
+                  {% if u.is_superuser %}<span class="sev-badge" style="background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe">Superuser</span>
+                  {% elif u.is_staff %}<span class="sev-badge" style="background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe">Staff</span>
+                  {% else %}<span class="sev-badge" style="background:#f8fafc;color:#64748b;border:1px solid #e2e8f0">User</span>{% endif %}
                 </td>
               </tr>
-              {% empty %}
-              <tr><td colspan="5" style="text-align:center; color:#64748b; padding:2rem;">No users yet.</td></tr>
-              {% endfor %}
+              {% empty %}<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:2rem;">No users yet.</td></tr>{% endfor %}
             </tbody>
           </table>
         </div>
       </div>
-
-    </div><!-- /content -->
-  </div><!-- /main -->
-</div><!-- /layout -->
+    </div>
+  </div>
+</div>
 
 <script>
-  // Animate bars on load
-  window.addEventListener('load', () => {
-    document.querySelectorAll('.bar-fill').forEach(bar => {
-      bar.style.width = bar.dataset.width;
-    });
-  });
+window.addEventListener('load',()=>{
+  document.querySelectorAll('.bar-fill[data-width]').forEach(b=>{ setTimeout(()=>{b.style.width=b.dataset.width;},200); });
+});
 </script>
 </body>
 </html>
